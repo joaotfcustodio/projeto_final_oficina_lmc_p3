@@ -1,0 +1,768 @@
+openapi: 3.0.4
+info:
+  title: API da Oficina LMC
+  description: API definida para a concretização do projeto final da UC Programção III.
+  version: 1.0.0
+  contact:
+    email: joaotfcustodio@gmail.com
+    
+servers:
+  - url: http://localhost:5001/api/v1
+    description: Servidor Local
+
+tags:
+- name: clientes
+  description: Dados referentes aos clientes da oficina LMC
+- name: veiculos
+  description: Dados referentes aos veiculos dos clientes da oficina LMC
+- name: reparacoes
+  description: Dados referentes às reparacoes dos veiculos
+- name: material_utilizado
+  description: Dados referentes ao material utilizado nas reparações dos veículos na oficina
+
+paths:
+  /clientes:
+    get:
+      summary: Obtém os dados dos clientes
+      description: Retorna as informações dos clientes registados
+      operationId: getAllclientes
+      responses:
+        '200':
+          description: Dados do cliente retornados com sucesso
+          content:
+            application/json: 
+              schema:
+                $ref: "#/components/schemas/Clientes"
+        '400':
+          description: Pedido inválido
+        '500':
+          description: Erro ao executar ao pedido
+    post:
+      summary: Cria um novo cliente
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Clientes'
+      responses:
+        '201':
+          description: Cliente criado com sucesso
+        '400':
+          description: Pedido inválido
+        '404':
+          description: Cliente não criado
+        '500':
+          description: Erro ao executar ao pedido
+  /clientes/{nif}:
+    put:
+      summary: Atualiza um cliente existente
+      parameters:
+        - name: nif
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Clientes'
+      responses:
+        '200':
+          description: Cliente atualizado com sucesso.
+        '400':
+          description: Pedido inválido.
+        "404":
+          description: Cliente não atualizado
+        '500':
+          description: Erro ao executar o pedido.
+    delete:
+      summary: Elimina um cliente
+      parameters:
+        - name: nif
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '204':
+          description: Cliente eliminado com sucesso
+        '400':
+          description: Pedido inválido.~
+        '404':
+          description: Cliente não eliminado
+        '500':
+          description: Erro ao executar o pedido.
+  /veiculos:
+    get:
+      summary: Obtém a lista dos veículos
+      responses:
+        '200':
+          description: Lista de veículos retornada com sucesso
+        '400':
+          description: Pedido inválido.
+        '500':
+          description: Erro ao executar o pedido.
+    post:
+      summary: Regista um novo veículo
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Veiculos'
+      responses:
+        '201':
+          description: Veículo criado com sucesso
+        '400':
+          description: Pedido inválido
+        '404':
+          description: Veículo não criado
+        '500':
+          description: Erro ao executar ao pedido
+
+  /veiculos/{matricula}:
+    put:
+      summary: Atualiza um veículo existente através da matrícula
+      parameters:
+        - name: matricula
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Veiculos'
+      responses:
+        '200':
+          description: Veículo atualizado com sucesso
+        '400':
+          description: Pedido inválido
+        '404':
+          description: Veículo não atualizado
+        "500":
+          description: Erro ao executar ao pedido
+    delete:
+      summary: Elimina um veículo
+      parameters:
+        - name: matricula
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '204':
+          description: Veículo eliminado com sucesso
+        '400':
+          description: Pedido inválido.~
+        '404':
+          description: Cliente não eliminado
+        '500':
+          description: Erro ao executar o pedido.
+
+  /veiculos/cliente/{nif}:
+    get:
+      summary: Obtém os veículos de um cliente
+      parameters:
+        - name: nif
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Lista de veículos do cliente retornada com sucesso
+        '400':
+          description: Pedido inválido.
+        '500':
+          description: Erro ao executar o pedido.
+
+  /veiculos/cliente/{nif}/{matricula}:
+    put:
+      summary: Atualiza um veículo específico de um cliente
+      parameters:
+        - name: nif
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: matricula
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Veiculos'
+      responses:
+        '200':
+          description: Veículo do cliente atualizado com sucesso
+        '400':
+          description: Pedido inválido
+        '404':
+          description: Veículo não atualizado
+        '500':
+          description: Erro ao executar ao pedido
+    delete:
+      summary: Elimina um veículo específico de um cliente
+      parameters:
+        - name: nif
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: matricula
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '204':
+          description: Veículo do cliente eliminado com sucesso
+        '400':
+          description: Pedido inválido.
+        '404':
+          description: Veículo não eliminado
+        '500':
+          description: Erro ao executar o pedido.
+
+  /veiculos/reparacao/{id_reparacao}:
+    get:
+      summary: Obtém o veículo associado a uma reparação
+      parameters:
+        - name: id_reparacao
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Veículo associado à reparação retornado com sucesso
+        '400':
+          description: Pedido inválido.
+        '500':
+          description: Erro ao executar o pedido.
+  /reparacoes:
+    get:
+      summary: Obtém a lista de reparações
+      responses:
+        '200':
+          description: Lista de reparações retornada com sucesso
+        '400':
+          description: Pedido inválido.
+        '500':
+          description: Erro ao executar o pedido.
+    post:
+      summary: Cria uma nova reparação
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Reparacoes'
+      responses:
+        '201':
+          description: Reparação criada com sucesso
+        '400':
+          description: Não é possível criar reparação sem veículo associado
+        '404':
+          description: Reparação não criado
+        '500':
+          description: Erro ao executar ao pedido
+  /reparacoes/veiculo/{matricula}:
+    get:
+      summary: Obtém reparações associadas a um veículo
+      parameters:
+        - name: matricula
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Lista de reparações do veículo retornada com sucesso
+        '400':
+          description: Pedido inválido.
+        '500':
+          description: Erro ao executar o pedido.
+
+  /reparacoes/veiculo/{matricula}/{id_reparacao}:
+    put:
+      summary: Atualiza uma reparação de um veículo
+      parameters:
+        - name: matricula
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: id_reparacao
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Reparacoes'
+      responses:
+        '200':
+          description: Reparação atualizada com sucesso
+        '400':
+          description: Pedido inválido
+        '404':
+          description: Reparação não atualizada
+        '500':
+          description: Erro ao executar ao pedido
+
+    delete:
+      summary: Elimina uma reparação de um veículo
+      parameters:
+        - name: matricula
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: id_reparacao
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '204':
+          description: Reparação eliminada com sucesso
+        '400':
+          description: Pedido inválido.
+        '404':
+          description: Veículo não eliminado
+        '500':
+          description: Erro ao executar o pedido.
+        
+  /material_utilizado:
+    get:
+      summary: Obtém a lista de materiais utilizados
+      responses:
+        '200':
+          description: Lista de materiais retornada com sucesso
+        '400':
+          description: Pedido inválido.
+        '500':
+          description: Erro ao executar o pedido.
+    post:
+      summary: Regista um novo material utilizado
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MaterialUtilizado'
+      responses:
+        '201':
+          description: Material utilizado registaado com sucesso.
+        '400':
+          description: Não é possível registar material sem uma reparação associada.
+        '404':
+          description: Lista de material utilizado não criada.
+        '500':
+          description: Erro ao executar ao pedido.
+
+  /material_utilizado/reparacao/{id_reparacao}/veiculo/{matricula}:
+    get:
+      summary: Obtém os materiais utilizados de uma reparação específica de um veículo
+      parameters:
+        - name: id_reparacao
+          in: path
+          required: true
+          schema:
+            type: integer
+        - name: matricula
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Materiais utilizados do veículo retornados com sucesso.
+        '400':
+          description: Pedido inválido.
+        '500':
+          description: Erro ao executar o pedido.
+
+    put:
+      summary: Atualiza materiais utilizados de uma reparação específica de um veículo
+      parameters:
+        - name: id_reparacao
+          in: path
+          required: true
+          schema:
+            type: integer
+        - name: matricula
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MaterialUtilizado'
+      responses:
+        '200':
+          description: Materiais utilizados atualizados com sucesso.
+        '400':
+          description: Pedido inválido.
+        '404':
+          description: Material utilizado não atualizado.
+        '500':
+          description: Erro ao executar ao pedido.
+
+    delete:
+      summary: Elimina materiais utilizados de uma reparação específica de um veículo.
+      parameters:
+        - name: id_reparacao
+          in: path
+          required: true
+          schema:
+            type: integer
+        - name: matricula
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '204':
+          description: Materiais utilizados eliminados com sucesso.
+        '400':
+          description: Pedido inválido.
+        '404':
+          description: Materiais utilizados não eliminados.
+        '500':
+          description: Erro ao executar o pedido.
+      
+
+components:
+  schemas:
+    Clientes:
+      required:
+        - nif
+        - nome
+        - contacto
+        - morada
+        - data_registo
+      type: object
+      properties:
+        nif:
+          type: integer
+          format: int32
+          description: chave primária da entidade clientes
+          example: 247521167
+        nome:
+          type: string
+          description: Nome completo do cliente
+          example: Carlos Silva
+        morada:
+          type: string
+          description: Morada fiscal do cliente
+          example: Rua da Fonte
+        data_registo:
+          type: string
+          description: Data do primeiro registo do cliente na base de dados da oficina
+          example: 08/12/2023
+        Clientes:
+          type: array
+          description: Todas as disciplinas que o estudante se encontra inscrito
+          items: 
+            $ref: '#/components/schemas/Clientes'
+    Veiculos:
+      required:
+        - matricula
+        - nome
+        - marca
+        - modelo
+        - cor
+        - nif
+      type: object
+      properties:
+        matricula:
+          type: string
+          description: Chave primária da entidade veiculos
+          example: 78-44-GT
+        nome:
+          type: string
+          description: Nome do veiculo
+          example: Golf
+        marca:
+          type: string
+          description: Nome da marca do veiculo
+          example: Volkswagen
+        modelo:
+          type: string
+          description: Nome do modelo do veiculo
+          example: MK3
+        cor:
+          type: string
+          description: Cor do veiculo
+          example: Preto
+        nif:
+          type: integer
+          format: int32
+          description: nif do cliente do veiculo
+          example: 208311508
+        Veiculos:
+          type: array
+          description: Todas as disciplinas que o professor leciona
+          items: 
+            $ref: "#/components/schemas/Veiculos"
+
+    Reparacoes:
+      required:
+        - id_reparacao
+        - matricula
+        - pintura_geral
+        - pintura_de_para_choques_dianteiro
+        - pintura_de_para_choques_traseiro
+        - pintura_de_porta_esquerda_da_frente
+        - pintura_de_porta_direita_da_frente
+        - pintura_de_porta_esquerda_de_tras
+        - pintura_de_porta_direita_de_tras 
+        - pintura_de_capas_de_espelho
+        - pintura_de_capot
+        - pintura_de_porta_bagagens
+        - pintura_de_tejadilho
+        - pintura_de_guarda_lamas_esquerdo_da_frente
+        - pintura_de_guarda_lamas_direito_da_frente
+        - pintura_de_guarda_lamas_esquerdo_de_tras
+        - pintura_de_guarda_lamas_direito_de_tras
+        - pintura_de_jantes
+        - pintura_de_plasticos
+        - pintura_de_embaladeiras
+        - pintura_de_grossuras_de_portas
+        - polimento_geral_profundo
+        - polimento_geral
+        - polimento_parcial
+        - restauro_de_pecas_plasticas
+        - restauro_de_pecas_metalicas
+        - preco
+        - bate_chapa
+      type: object
+      properties:
+        id_reparacao:
+          type: integer
+          format: int32
+          description: chave primária da entidade reparacoes
+          example: 1
+        matricula:
+          type: string
+          description: Chave primária da entidade veiculos
+          example: 78-44-GT
+        pintura_geral:
+          type: boolean
+          description: true or false
+          example: "true"
+        pintura_de_para_choques_dianteiro:
+          type: boolean
+          description: true or false
+          example: "true"
+        pintura_de_para_choques_traseiro:
+          type: boolean
+          description: true or false
+          example: "true"
+        pintura_de_porta_esquerda_da_frente:
+          type: boolean
+          description: true or false
+          example: "true"
+        pintura_de_porta_direita_da_frente:
+          type: boolean
+          description: true or false
+          example: "true"
+        pintura_de_porta_esquerda_de_tras:
+          type: boolean
+          description: true or false
+          example: "true"
+        pintura_de_porta_direita_de_tras:
+          type: boolean
+          description: true or false
+          example: "true"
+        pintura_de_capas_de_espelho:
+          type: boolean
+          description: true or false
+        pintura_capot:
+          type: boolean
+          description: true or false
+          example: "true"
+        pintura_porta_bagagens:
+          type: boolean
+          description: true or false
+          example: "true"
+        pintura_de_tejadilho:
+          type: boolean
+          description: true or false
+          example: "true"
+        pintura_de_guarda_lamas_esquerdo_da_frente:
+          type: boolean
+          description: true or false
+          example: "true"
+        pintura_de_guarda_lamas_direito_da_frente:
+          type: boolean
+          description: true or false
+          example: "true"
+        pintura_de_guarda_lamas_esquerdo_de_tras:
+          type: boolean
+          description: true or false
+          example: "true"
+        pintura_de_guarda_lamas_direito_de_tras:
+          type: boolean
+          description: true or false
+          example: "true"
+        pintura_jantes:
+          type: boolean
+          description: true or false
+          example: "true"
+        pintura_de_plasticos:
+          type: boolean
+          description: true or false
+          example: "true"
+        pintura_de_embaladeiras:
+          type: boolean
+          description: true or false
+          example: "true"
+        pintura_de_grossuras_de_portas:
+          type: boolean
+          description: true or false
+          example: "true"
+        polimento_geral_profundo:
+          type: boolean
+          description: true or false
+          example: "true"
+        polimento_geral:
+          type: boolean
+          description: true or false
+          example: "true"
+        polimento_parcial:
+          type: boolean
+          description: true or false
+          example: "true"
+        restauro_de_pecas_plasticas:
+          type: boolean
+          description: true or false
+          example: "true"
+        restauro_de_pecas_metalicas:
+          type: boolean
+          description: true or false
+          example: "true"
+        preco:
+          type: number
+          description: float
+          example: 4096.87
+        bate_chapa:
+          type: boolean
+          description: true or false
+          example: "true" 
+        subject:
+          type: array
+          description: Todas as disciplinas que o professor leciona
+          items: 
+            $ref: '#/components/schemas/Reparacoes'
+    
+    MaterialUtilizado:   
+      required:
+        - id_material_utilizado
+        - preco_verniz_carro
+        - quantidade_gasoleo_estufa_total
+        - quantidade_tinta_jantes
+        - quantidade_verniz
+        - preco_gasoleo_estufa_lt
+        - preco_total_material_carro
+        - massa_polimento
+        - quantidade_tinta
+        - preco_tinta_carro
+        - marca_verniz
+        - matricula
+        - marca_tinta
+        - id_reparacao
+        - preco_tinta_jantes
+      type: object
+      properties:
+        id_material_utilizado:
+          type: integer
+          format: int32
+          description: Chave primária da entidade material_utilizado
+          example: 1
+        perco_verniz_carro:
+          type: number
+          format: float
+          description: Preço final do verniz utilizado (Em Litros)
+          example: 0.5
+        quantidade_gasoleo_estufa_total:
+          type: number
+          format: float
+          description: Quantidade de gasoleo gasto na reparação do veículo (Em litros)
+          example: 10
+        quantidade_tinta_jantes:
+          type: number
+          format: float
+          description: Quantidade de tinta utilizada nas jantes (Em Litros)
+          example: 0.2
+        quantidade_verniz:
+          type: number
+          format: float
+          description: Quantidade de verniz utilizado (Em Litros)
+          example: 0.5
+        preco_gasoleo_estufa_lt:
+          type: number
+          format: float
+          description: Preço por litro utilizado na estufa
+          example: 1.4
+        preco_total_material_carro:
+          type: number
+          format: float
+          description: Preço final do material utilizado no carro
+          example: 219.99  
+        massa_polimento:
+          type: string
+          description: Marca da massa de polimento utilizada
+          example: AutoFinesse
+        quantidade_tinta:
+          type: number
+          format: float
+          description: Quantidade de tinta utilizada na pintura do veículo (Em Litros)
+          example: 1.2
+        preco_tinta_carro:
+          type: number
+          format: float
+          description: Preço final da tinta utilizada na pintura do veículo 
+          example: 44.99
+        marca_verniz:
+          type: string
+          description: Nome da marca de verniz utilizada
+          example: Cromax
+        marca_tinta:
+          type: string
+          description: Nome da marca de tinta utilizada
+          example: Mipa
+        id_reparacao:
+          type: integer
+          format: int32
+          description: Número do ID da reparação
+          example: 4
+        preco_tinta_jantes:
+          type: number
+          format: float
+          description: Preço da tinta utilizada na pintura das jantes
+          example: 29.99
+
+        material_utilizado:
+          type: array
+          description: Lista de material utilizado
+          items: 
+            $ref: '#/components/schemas/MaterialUtilizado'     
