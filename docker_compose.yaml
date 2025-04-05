@@ -1,0 +1,55 @@
+version: "1.0"
+
+services:
+    node:
+        container_name: f2_webserver
+        image: node:latest
+        working_dir: /app
+        ports: 
+            - "8080:8080"
+        restart: "always"
+        depends_on:
+            - mysql
+        volumes:
+            - ./node_app:/app
+        networks:
+            - f2_network
+    
+    mysql:
+        container_name: f2_mysql
+        image: mysql:latest
+        restart: "always"
+        ports: 
+            - "3306:3306"
+        environment:
+            MYSQL_ROOT_PASSWORD: 123
+            MYSQL_DATABASE: namp_db
+            MYSQL_USER: namp_user
+            MYSQL_PASSWORD: namp_pass
+        volumes:
+            - mysql_data:/var/lib/mysql
+        networks:
+            - f2_network
+    
+    phpmyadmin:
+        container_name: f2_phpmyadmin
+        image: phpmyadmin/phpmyadmin:latest
+        restart: "always"
+        environment:
+            PMA_HOST: mysql
+            PMAPORT: 3306
+            MYSQL_ROOT_PASSWORD: 123
+        ports:
+            - "8081:80"
+        depends_on:
+            - mysql
+        networks: 
+            - f2_network
+
+networks:
+    f2_network:
+      driver: bridge
+
+volumes:
+    node_app:
+    mysql_data:
