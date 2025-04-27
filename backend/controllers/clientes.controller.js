@@ -50,7 +50,7 @@ endpointsFunction.getAllClientes = async (req, res) => {
 };
 
 //método que atualiza dos dados do estudante de acordo com o seu NIF
-endpointsFunction.updateClientes = async (req, res) => {
+endpointsFunction.updateCliente = async (req, res) => {
   const { nif } = req.params;
   const { nome, morada, contacto, data_registo } = req.body;
 
@@ -87,7 +87,7 @@ endpointsFunction.updateClientes = async (req, res) => {
 };
 
 //método que apaga os dados de um estudante de acordo com o seu NIF
-endpointsFunction.deleteStudent = async (req, res) => {
+endpointsFunction.deleteCliente = async (req, res) => {
   const { nif } = req.params;
   try {
     const dados = await Clientes.destroy({
@@ -109,7 +109,7 @@ endpointsFunction.deleteStudent = async (req, res) => {
 };
 
 //método que retorna os dados de um estudante de acordo com o seu NIF
-endpointsFunction.geClientesByNif = async (req, res) => {
+endpointsFunction.geClienteByNif = async (req, res) => {
   const { nif } = req.params;
   try {
     const dados = await Clientes.findOne({
@@ -137,7 +137,7 @@ endpointsFunction.geClientesByNif = async (req, res) => {
 };
 
 //método que retorna os dados de um estudante de acordo com o seu nome
-endpointsFunction.getClientesByNome = async (req, res) => {
+endpointsFunction.getClienteByNome = async (req, res) => {
   const { nome } = req.params;
   try {
     const dados = await Clientes.findOne({
@@ -165,7 +165,7 @@ endpointsFunction.getClientesByNome = async (req, res) => {
 };
 
 // método que retorna todos os veículos de um cliente de acordo com o seu NIF
-endpointsFunction.getVeiculosEnrolledByClientes = async (req, res) => {
+endpointsFunction.getVeiculosEnrolledByCliente = async (req, res) => {
   const { nif } = req.params;
   try {
     const dados = await Clientes.findOne({
@@ -196,7 +196,7 @@ endpointsFunction.getVeiculosEnrolledByClientes = async (req, res) => {
 };
 
 // método que adiciona um veículo a um cliente de acordo com os seus NIF
-endpointsFunction.addVeiculosToClientes = async (req, res) => {
+endpointsFunction.addVeiculosToCliente = async (req, res) => {
   const { nif } = req.params;
   const { matricula } = req.body;
 
@@ -220,7 +220,7 @@ endpointsFunction.addVeiculosToClientes = async (req, res) => {
     }
 
     // Adiciona o veículo ao cliente
-    await Clientes.addVeiculosToClientes(Veiculos);
+    await Clientes.addVeiculosToCliente(Veiculos);
 
     res.status(200).json({
       status: "success",
