@@ -26,6 +26,8 @@ paths:
       summary: Obtém os dados dos clientes
       description: Retorna as informações dos clientes registados
       operationId: getAllclientes
+      tags:
+        - clientes
       responses:
         '200':
           description: Dados do cliente retornados com sucesso
@@ -45,6 +47,8 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/Clientes'
+      tags:
+        - clientes
       responses:
         '201':
           description: Cliente criado com sucesso
@@ -69,6 +73,8 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/Clientes'
+      tags:
+        - clientes
       responses:
         '200':
           description: Cliente atualizado com sucesso.
@@ -86,6 +92,8 @@ paths:
           required: true
           schema:
             type: string
+      tags:
+        - clientes
       responses:
         '204':
           description: Cliente eliminado com sucesso
@@ -98,6 +106,8 @@ paths:
   /veiculos:
     get:
       summary: Obtém a lista dos veículos
+      tags:
+        - veiculos
       responses:
         '200':
           description: Lista de veículos retornada com sucesso
@@ -113,6 +123,8 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/Veiculos'
+      tags:
+        - veiculos
       responses:
         '201':
           description: Veículo criado com sucesso
@@ -138,6 +150,8 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/Veiculos'
+      tags:
+        - veiculos
       responses:
         '200':
           description: Veículo atualizado com sucesso
@@ -155,6 +169,8 @@ paths:
           required: true
           schema:
             type: string
+      tags:
+        - veiculos
       responses:
         '204':
           description: Veículo eliminado com sucesso
@@ -174,6 +190,8 @@ paths:
           required: true
           schema:
             type: string
+      tags:
+        - veiculos
       responses:
         '200':
           description: Lista de veículos do cliente retornada com sucesso
@@ -202,6 +220,8 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/Veiculos'
+      tags:
+        - veiculos
       responses:
         '200':
           description: Veículo do cliente atualizado com sucesso
@@ -224,6 +244,8 @@ paths:
           required: true
           schema:
             type: string
+      tags:
+        - veiculos
       responses:
         '204':
           description: Veículo do cliente eliminado com sucesso
@@ -243,6 +265,8 @@ paths:
           required: true
           schema:
             type: integer
+      tags:
+        - veiculos
       responses:
         '200':
           description: Veículo associado à reparação retornado com sucesso
@@ -253,6 +277,8 @@ paths:
   /reparacoes:
     get:
       summary: Obtém a lista de reparações
+      tags:
+        - reparacoes
       responses:
         '200':
           description: Lista de reparações retornada com sucesso
@@ -268,6 +294,8 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/Reparacoes'
+      tags:
+        - reparacoes
       responses:
         '201':
           description: Reparação criada com sucesso
@@ -286,6 +314,8 @@ paths:
           required: true
           schema:
             type: string
+      tags:
+        - reparacoes
       responses:
         '200':
           description: Lista de reparações do veículo retornada com sucesso
@@ -314,6 +344,8 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/Reparacoes'
+      tags:
+        - reparacoes
       responses:
         '200':
           description: Reparação atualizada com sucesso
@@ -337,6 +369,8 @@ paths:
           required: true
           schema:
             type: integer
+      tags:
+        - reparacoes
       responses:
         '204':
           description: Reparação eliminada com sucesso
@@ -350,6 +384,8 @@ paths:
   /material_utilizado:
     get:
       summary: Obtém a lista de materiais utilizados
+      tags:
+        - material_utilizado
       responses:
         '200':
           description: Lista de materiais retornada com sucesso
@@ -365,6 +401,8 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/MaterialUtilizado'
+      tags:
+        - material_utilizado
       responses:
         '201':
           description: Material utilizado registaado com sucesso.
@@ -389,6 +427,8 @@ paths:
           required: true
           schema:
             type: string
+      tags:
+        - material_utilizado
       responses:
         '200':
           description: Materiais utilizados do veículo retornados com sucesso.
@@ -416,6 +456,8 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/MaterialUtilizado'
+      tags:
+        - material_utilizado
       responses:
         '200':
           description: Materiais utilizados atualizados com sucesso.
@@ -439,6 +481,8 @@ paths:
           required: true
           schema:
             type: string
+      tags:
+        - material_utilizado
       responses:
         '204':
           description: Materiais utilizados eliminados com sucesso.
@@ -478,9 +522,9 @@ components:
           type: string
           description: Data do primeiro registo do cliente na base de dados da oficina
           example: 08/12/2023
-        Clientes:
+        total_clientes:
           type: array
-          description: Todas as disciplinas que o estudante se encontra inscrito
+          description: Todos os clientes na base de dados da oficina
           items: 
             $ref: '#/components/schemas/Clientes'
     Veiculos:
@@ -518,9 +562,9 @@ components:
           format: int32
           description: nif do cliente do veiculo
           example: 208311508
-        Veiculos:
+        total_veiculos:
           type: array
-          description: Todas as disciplinas que o professor leciona
+          description: Todos os veículos associados a um cliente
           items: 
             $ref: "#/components/schemas/Veiculos"
 
@@ -668,9 +712,9 @@ components:
           type: boolean
           description: true or false
           example: "true" 
-        subject:
+        total_reparacoes:
           type: array
-          description: Todas as disciplinas que o professor leciona
+          description: Todas as reparações associadas um veículo.
           items: 
             $ref: '#/components/schemas/Reparacoes'
     
@@ -761,8 +805,8 @@ components:
           description: Preço da tinta utilizada na pintura das jantes
           example: 29.99
 
-        material_utilizado:
+        total_material_utilizado:
           type: array
-          description: Lista de material utilizado
+          description: Lista de material utilizado em cada reparação.
           items: 
             $ref: '#/components/schemas/MaterialUtilizado'     
