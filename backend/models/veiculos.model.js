@@ -1,6 +1,6 @@
 const sequelize = require("sequelize");
 const conexao = require("../config/database");
-
+//boas
 let Veiculos = conexao.define(
   "veiculos",
   {
