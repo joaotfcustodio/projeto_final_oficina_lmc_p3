@@ -1,33 +1,34 @@
-const sequelize = require("sequelize");
-const conexao = require("../config/database");
+const { DataTypes } = require("sequelize");
+const sequelize = require("../config/database");
 
-let Clientes = conexao.define(
-  "clientes",
+const Clientes = sequelize.define(
+  "Cliente",
   {
+    nif: {
+      type: DataTypes.STRING,
+      primaryKey: true,
+      allowNull: false,
+    },
     nome: {
-      type: sequelize.STRING,
+      type: DataTypes.STRING,
       allowNull: false,
     },
     morada: {
-      type: sequelize.STRING,
-      allowNull: true,
-    },
-    nif: {
-      type: sequelize.INTEGER,
+      type: DataTypes.STRING,
       allowNull: false,
     },
     contacto: {
-      type: sequelize.INTEGER,
-      allowNull: true,
+      type: DataTypes.STRING,
+      allowNull: false,
     },
     data_registo: {
-      type: sequelize.STRING,
+      type: DataTypes.DATEONLY,
       allowNull: false,
     },
   },
   {
     tableName: "clientes",
-    timestamps: true,
+    timestamps: false,
   }
 );
 

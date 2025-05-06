@@ -1,4 +1,5 @@
-openapi: 3.0.4
+#yaml-language-server: $schema=https://raw.githubusercontent.com/OAI/OpenAPI-Specification/main/schemas/v3.0/schema.json
+openapi: 3.0.0
 info:
   title: API da Oficina LMC
   description: API definida para a concretização do projeto final da UC Programção III.
@@ -62,8 +63,8 @@ paths:
     put:
       summary: Atualiza um cliente existente
       parameters:
-        - name: nif
-          in: path
+        - in: path
+          name: nif
           required: true
           schema:
             type: string
@@ -87,8 +88,8 @@ paths:
     delete:
       summary: Elimina um cliente
       parameters:
-        - name: nif
-          in: path
+        - in: path
+          name: nif
           required: true
           schema:
             type: string
@@ -139,8 +140,8 @@ paths:
     put:
       summary: Atualiza um veículo existente através da matrícula
       parameters:
-        - name: matricula
-          in: path
+        - in: path
+          name: matricula
           required: true
           schema:
             type: string
@@ -164,11 +165,11 @@ paths:
     delete:
       summary: Elimina um veículo
       parameters:
-        - name: matricula
-          in: path
-          required: true
+        - in: path
+          name: matricula
           schema:
             type: string
+          required: true
       tags:
         - veiculos
       responses:
@@ -185,8 +186,8 @@ paths:
     get:
       summary: Obtém os veículos de um cliente
       parameters:
-        - name: nif
-          in: path
+        - in: path
+          name: nif  
           required: true
           schema:
             type: string
@@ -204,13 +205,13 @@ paths:
     put:
       summary: Atualiza um veículo específico de um cliente
       parameters:
-        - name: nif
-          in: path
+        - in: path
+          name: nif
           required: true
           schema:
             type: string
-        - name: matricula
-          in: path
+        - in: path
+          name: matricula
           required: true
           schema:
             type: string
@@ -234,13 +235,13 @@ paths:
     delete:
       summary: Elimina um veículo específico de um cliente
       parameters:
-        - name: nif
-          in: path
+        - in: path
+          name: nif
           required: true
           schema:
             type: string
-        - name: matricula
-          in: path
+        - in: path
+          name: matricula
           required: true
           schema:
             type: string
@@ -260,8 +261,8 @@ paths:
     get:
       summary: Obtém o veículo associado a uma reparação
       parameters:
-        - name: id_reparacao
-          in: path
+        - in: path
+          name: id_reparacao
           required: true
           schema:
             type: integer
@@ -309,8 +310,8 @@ paths:
     get:
       summary: Obtém reparações associadas a um veículo
       parameters:
-        - name: matricula
-          in: path
+        - in: path
+          name: matricula
           required: true
           schema:
             type: string
@@ -328,13 +329,13 @@ paths:
     put:
       summary: Atualiza uma reparação de um veículo
       parameters:
-        - name: matricula
-          in: path
+        - in: path
+          name: matricula
           required: true
           schema:
             type: string
-        - name: id_reparacao
-          in: path
+        - in: path
+          name: id_reparacao
           required: true
           schema:
             type: integer
@@ -359,13 +360,13 @@ paths:
     delete:
       summary: Elimina uma reparação de um veículo
       parameters:
-        - name: matricula
-          in: path
+        - in: path
+          name: matricula
           required: true
           schema:
             type: string
-        - name: id_reparacao
-          in: path
+        - in: path
+          name: id_reparacao
           required: true
           schema:
             type: integer
@@ -417,13 +418,13 @@ paths:
     get:
       summary: Obtém os materiais utilizados de uma reparação específica de um veículo
       parameters:
-        - name: id_reparacao
-          in: path
+        - in: path
+          name: id_reparacao
           required: true
           schema:
             type: integer
-        - name: matricula
-          in: path
+        - in: path
+          name: matricula
           required: true
           schema:
             type: string
@@ -440,13 +441,13 @@ paths:
     put:
       summary: Atualiza materiais utilizados de uma reparação específica de um veículo
       parameters:
-        - name: id_reparacao
-          in: path
+        - in: path
+          name: id_reparacao
           required: true
           schema:
             type: integer
-        - name: matricula
-          in: path
+        - in: path
+          name: matricula
           required: true
           schema:
             type: string
@@ -471,13 +472,13 @@ paths:
     delete:
       summary: Elimina materiais utilizados de uma reparação específica de um veículo.
       parameters:
-        - name: id_reparacao
-          in: path
+        - in: path
+          name: id_reparacao
           required: true
           schema:
             type: integer
-        - name: matricula
-          in: path
+        - in: path
+          name: matricula
           required: true
           schema:
             type: string

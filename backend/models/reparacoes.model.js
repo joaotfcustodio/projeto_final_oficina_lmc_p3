@@ -1,7 +1,7 @@
 const sequelize = require("sequelize");
 const conexao = require("../config/database");
 
-let Reparacoes = conexao.define(
+let Reparacao = sequelize.define(
   "reparacoes",
   {
     id_reparacao: {
@@ -128,4 +128,4 @@ let Reparacoes = conexao.define(
   }
 );
 
-module.exports = Reparacoes;
+module.exports = Reparacao;

@@ -1,42 +1,40 @@
 const express = require("express");
 const router = express.Router();
 
-//importação middleware
+// Importação middleware
 const middleware = require("../middleware.js");
 
-//importação controller
-const material_utilizadoController = require("../controllers/material_utilizado.controller.js");
+// Importação controller
+const materialController = require("../controllers/material_utilizado.controller.js");
 
-//rotas (endpoints) da entidade 'aluno'
+// Endpoints
+
+// Criar material utilizado
 router.post(
-  "/material_utilizado",
+  "/materiais",
   middleware.checkToken,
-  material_utilizadoController.createMaterialUtilizado
+  materialController.createMaterial
 );
+
+// Obter material utilizado por ID da reparação
 router.get(
-  "/material_utilizado",
+  "/materiais/:id_reparacao",
   middleware.checkToken,
-  material_utilizadoController.getAllMaterialUtilizado
+  materialController.getMaterialByReparacao
 );
+
+// Atualizar material utilizado por ID da reparação
 router.put(
-  "/material_utilizado/reparacao/:id_reparacao/veiculos/:matricula",
+  "/materiais/:id_reparacao",
   middleware.checkToken,
-  material_utilizadoController.updateMaterialUtilizado
+  materialController.updateMaterialByReparacao
 );
+
+// Eliminar material utilizado por ID da reparação
 router.delete(
-  "/material_utilizado/reparacao/:id_reparacao/veiculos/:matricula",
+  "/materiais/:id_reparacao",
   middleware.checkToken,
-  material_utilizadoController.deleteMaterialUtilizado
-);
-router.get(
-  "/material_utilizado/reparacao/:id_reparacao/veiculos/:matricula",
-  middleware.checkToken,
-  material_utilizadoController.getmaterial_utilizadoByMatricula
-);
-router.get(
-  "/material_utilizado/reparacao/:id_reparacao/veiculos/:matricula",
-  middleware.checkToken,
-  material_utilizadoController.getmaterial_utilizadoById_reparacao
+  materialController.deleteMaterialByReparacao
 );
 
 module.exports = router;

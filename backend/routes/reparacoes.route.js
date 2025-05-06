@@ -1,32 +1,40 @@
 const express = require("express");
 const router = express.Router();
 
-//importação middleware
+// Importação middleware
 const middleware = require("../middleware.js");
 
-//importação controller
+// Importação controller
 const reparacoesController = require("../controllers/reparacoes.controller.js");
 
-//rotas (endpoints) da entidade 'aluno'
+// Endpoints
+
+// Criar reparação
 router.post(
   "/reparacoes",
   middleware.checkToken,
-  reparacoesController.createReparacoes
+  reparacoesController.createReparacao
 );
+
+// Obter todas as reparações de um veículo
 router.get(
-  "/reparacoes/veiculos/:matricula",
+  "/reparacoes/veiculo/:matricula",
   middleware.checkToken,
-  reparacoesController.getAllReparacoes
+  reparacoesController.getReparacoesByMatricula
 );
+
+// Atualizar reparação por ID
 router.put(
-  "/reparacoes/veiculos/:matricula",
+  "/reparacoes/:id_reparacao",
   middleware.checkToken,
-  reparacoesController.updateReparacoes
+  reparacoesController.updateReparacao
 );
+
+// Eliminar reparação por ID
 router.delete(
-  "/reparacoes/veiculos/:matricula",
+  "/reparacoes/:id_reparacao",
   middleware.checkToken,
-  reparacoesController.deleteReparacoes
+  reparacoesController.deleteReparacao
 );
 
 module.exports = router;

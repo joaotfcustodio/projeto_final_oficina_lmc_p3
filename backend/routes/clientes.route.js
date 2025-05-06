@@ -1,17 +1,17 @@
 const express = require("express");
 const router = express.Router();
 
-//importação middleware
+// Importação middleware
 const middleware = require("../middleware.js");
 
-//importação controller
+// Importação controller
 const clientesController = require("../controllers/clientes.controller.js");
 
-//rotas (endpoints) da entidade 'aluno'
+// Endpoints
 router.post(
   "/clientes",
   middleware.checkToken,
-  clientesController.createClientes
+  clientesController.createCliente
 );
 router.get(
   "/clientes",
@@ -21,22 +21,22 @@ router.get(
 router.put(
   "/clientes/:nif",
   middleware.checkToken,
-  clientesController.updateClientes
+  clientesController.updateCliente
 );
 router.delete(
   "/clientes/:nif",
   middleware.checkToken,
-  clientesController.deleteClientes
+  clientesController.deleteCliente
 );
 router.get(
-  "/clientes/:nif",
+  "/clientes/nif/:nif",
   middleware.checkToken,
-  clientesController.getClientesByNif
+  clientesController.getClienteByNif
 );
 router.get(
-  "/clientes/:nome",
+  "/clientes/nome/:nome",
   middleware.checkToken,
-  clientesController.getClientesByNome
+  clientesController.getClienteByNome
 );
 
 module.exports = router;

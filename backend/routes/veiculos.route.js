@@ -1,42 +1,35 @@
 const express = require("express");
 const router = express.Router();
 
-//importação middleware
+// Importação middleware
 const middleware = require("../middleware.js");
 
-//importação controller
+// Importação controller
 const veiculosController = require("../controllers/veiculos.controller.js");
 
-//rotas (endpoints) da entidade 'aluno'
+// Endpoints
 router.post(
   "/veiculos",
   middleware.checkToken,
-  veiculosController.createVeiculos
+  veiculosController.createVeiculo
 );
+
 router.get(
-  "/veiculos",
+  "/veiculos/:matricula",
   middleware.checkToken,
-  veiculosController.getAllVeiculos
+  veiculosController.getVeiculoByMatricula
 );
+
 router.put(
   "/veiculos/:matricula",
   middleware.checkToken,
-  veiculosController.updateVeiculos
+  veiculosController.updateVeiculo
 );
+
 router.delete(
   "/veiculos/:matricula",
   middleware.checkToken,
-  veiculosController.deleteVeiculos
-);
-router.get(
-  "/veiculos/:matricula",
-  middleware.checkToken,
-  veiculosController.getVeiculosByMatricula
-);
-router.get(
-  "/veiculos/:marca",
-  middleware.checkToken,
-  veiculosController.getVeiculosByMarca
+  veiculosController.deleteVeiculo
 );
 
 module.exports = router;

@@ -1,246 +1,138 @@
-const Veiculos = require("../models/veiculos.model");
-const Clientes = require("../models/clientes.model");
-const Reparacoes = require("../models/reparacoes.model");
+const Veiculo = require("../models/veiculos.model");
+const Cliente = require("../models/clientes.model");
+const Reparacao = require("../models/reparacoes.model");
+const MaterialUtilizado = require("../models/material_utilizado.model");
 
-const veiculosController = {};
+const endpointsFunction = {};
 
-// Criar veículo e associar a um cliente
-veiculosController.createVeiculo = async (req, res) => {
-  const { matricula, marca, modelo, cor, clienteNif } = req.body;
-
+// Criar veículo e associar a cliente existente por NIF
+endpointsFunction.createVeiculo = async (req, res) => {
   try {
-    const cliente = await Clientes.findByPk(clienteNif);
+    const { matricula, marca, modelo, cor, nif } = req.body;
+
+    const cliente = await Cliente.findOne({ where: { nif } });
+
     if (!cliente) {
-      return res
-        .status(404)
-        .json({ status: "error", message: "Cliente não encontrado." });
+      return res.status(404).json({
+        status: "error",
+        message: "Cliente com o NIF indicado não existe.",
+      });
     }
 
-    const veiculo = await Veiculos.create({ matricula, marca, modelo, cor });
+    const veiculo = await Veiculo.create({ matricula, marca, modelo, cor });
     await veiculo.addCliente(cliente);
 
     res.status(201).json({
       status: "success",
-      message: "Veículo criado e associado ao cliente com sucesso.",
-      data: veiculo,
+      message: "Veículo criado com sucesso.",
     });
-  } catch (error) {
+  } catch (err) {
     res.status(500).json({
       status: "error",
-      message: "Erro ao criar o veículo.",
-      details: error.message,
+      message: "Erro ao criar veículo.",
+      error: err.message,
     });
   }
 };
 
-// Obter todos os veículos
-veiculosController.getAllVeiculos = async (req, res) => {
+// Obter veículo por matrícula, incluindo reparações e material utilizado
+endpointsFunction.getVeiculoByMatricula = async (req, res) => {
   try {
-    const veiculos = await Veiculos.findAll({
+    const { matricula } = req.params;
+
+    const veiculo = await Veiculo.findByPk(matricula, {
       include: [
         {
-          model: Clientes,
-          as: "clientes",
-          through: { attributes: [] },
+          model: Cliente,
           attributes: ["nif", "nome"],
-        },
-        {
-          model: Reparacoes,
-          as: "reparacoes",
-        },
-      ],
-    });
-
-    res.status(200).json({
-      status: "success",
-      message: "Lista de veículos.",
-      data: veiculos,
-    });
-  } catch (error) {
-    res.status(500).json({
-      status: "error",
-      message: "Erro ao obter veículos.",
-      details: error.message,
-    });
-  }
-};
-
-// Obter veículos por cliente
-veiculosController.getVeiculosByCliente = async (req, res) => {
-  const { nif } = req.params;
-
-  try {
-    const cliente = await Clientes.findByPk(nif, {
-      include: {
-        model: Veiculos,
-        as: "veiculos",
-        include: [
-          {
-            model: Reparacoes,
-            as: "reparacoes",
-          },
-        ],
-        through: { attributes: [] },
-      },
-    });
-
-    if (!cliente) {
-      return res
-        .status(404)
-        .json({ status: "error", message: "Cliente não encontrado." });
-    }
-
-    const veiculosCompletos = cliente.veiculos.map((veiculo) => ({
-      matricula: veiculo.matricula,
-      marca: veiculo.marca,
-      modelo: veiculo.modelo,
-      cor: veiculo.cor,
-      cliente: {
-        nif: cliente.nif,
-        nome: cliente.nome,
-      },
-      reparacoes: veiculo.reparacoes,
-    }));
-
-    res.status(200).json({
-      status: "success",
-      message: "Veículos encontrados.",
-      data: veiculosCompletos,
-    });
-  } catch (error) {
-    res.status(500).json({
-      status: "error",
-      message: "Erro ao buscar veículos do cliente.",
-      details: error.message,
-    });
-  }
-};
-
-// Obter veículo por matrícula
-veiculosController.getVeiculoByMatricula = async (req, res) => {
-  const { matricula } = req.params;
-
-  try {
-    const veiculo = await Veiculos.findByPk(matricula, {
-      include: [
-        {
-          model: Clientes,
-          as: "clientes",
           through: { attributes: [] },
-          attributes: ["nif", "nome"],
         },
         {
-          model: Reparacoes,
-          as: "reparacoes",
+          model: Reparacao,
+          include: [
+            {
+              model: MaterialUtilizado,
+            },
+          ],
         },
       ],
     });
 
     if (!veiculo) {
-      return res
-        .status(404)
-        .json({ status: "error", message: "Veículo não encontrado." });
+      return res.status(404).json({
+        status: "error",
+        message: "Veículo não encontrado.",
+      });
     }
 
     res.status(200).json({
       status: "success",
-      message: "Veículo encontrado.",
-      data: veiculo,
+      veiculo,
     });
-  } catch (error) {
+  } catch (err) {
     res.status(500).json({
       status: "error",
-      message: "Erro ao buscar o veículo.",
-      details: error.message,
+      message: "Erro ao obter veículo.",
+      error: err.message,
     });
   }
 };
 
-// Criar reparação associada a um veículo
-veiculosController.createReparacao = async (req, res) => {
-  const { matricula } = req.params;
-  const reparacaoData = req.body;
-
+// Atualizar dados de um veículo
+endpointsFunction.updateVeiculo = async (req, res) => {
   try {
-    const veiculo = await Veiculos.findByPk(matricula);
+    const { matricula } = req.params;
+    const { marca, modelo, cor } = req.body;
+
+    const veiculo = await Veiculo.findByPk(matricula);
     if (!veiculo) {
-      return res
-        .status(404)
-        .json({ status: "error", message: "Veículo não encontrado." });
+      return res.status(404).json({
+        status: "error",
+        message: "Veículo não encontrado.",
+      });
     }
 
-    const novaReparacao = await Reparacoes.create({
-      ...reparacaoData,
-      matricula,
-    });
-
-    res.status(201).json({
-      status: "success",
-      message: "Reparação criada com sucesso.",
-      data: novaReparacao,
-    });
-  } catch (error) {
-    res.status(500).json({
-      status: "error",
-      message: "Erro ao criar a reparação.",
-      details: error.message,
-    });
-  }
-};
-
-// Editar uma reparação existente
-veiculosController.updateReparacao = async (req, res) => {
-  const { id_reparacao } = req.params;
-  const updateData = req.body;
-
-  try {
-    const reparacao = await Reparacoes.findByPk(id_reparacao);
-    if (!reparacao) {
-      return res
-        .status(404)
-        .json({ status: "error", message: "Reparação não encontrada." });
-    }
-
-    await reparacao.update(updateData);
+    await veiculo.update({ marca, modelo, cor });
 
     res.status(200).json({
       status: "success",
-      message: "Reparação atualizada com sucesso.",
-      data: reparacao,
+      message: "Veículo atualizado com sucesso.",
     });
-  } catch (error) {
+  } catch (err) {
     res.status(500).json({
       status: "error",
-      message: "Erro ao atualizar a reparação.",
-      details: error.message,
+      message: "Erro ao atualizar veículo.",
+      error: err.message,
     });
   }
 };
 
-// Apagar uma reparação
-veiculosController.deleteReparacao = async (req, res) => {
-  const { id_reparacao } = req.params;
-
+// Eliminar veículo
+endpointsFunction.deleteVeiculo = async (req, res) => {
   try {
-    const deleted = await Reparacoes.destroy({ where: { id_reparacao } });
+    const { matricula } = req.params;
 
-    if (!deleted) {
-      return res
-        .status(404)
-        .json({ status: "error", message: "Reparação não encontrada." });
+    const veiculo = await Veiculo.findByPk(matricula);
+    if (!veiculo) {
+      return res.status(404).json({
+        status: "error",
+        message: "Veículo não encontrado.",
+      });
     }
+
+    await veiculo.destroy();
 
     res.status(200).json({
       status: "success",
-      message: "Reparação apagada com sucesso.",
+      message: "Veículo eliminado com sucesso.",
     });
-  } catch (error) {
+  } catch (err) {
     res.status(500).json({
       status: "error",
-      message: "Erro ao apagar a reparação.",
-      details: error.message,
+      message: "Erro ao eliminar veículo.",
+      error: err.message,
     });
   }
 };
 
-module.exports = veiculosController;
+module.exports = endpointsFunction;

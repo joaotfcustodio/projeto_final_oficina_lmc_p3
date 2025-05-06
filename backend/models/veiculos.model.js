@@ -1,40 +1,31 @@
-const sequelize = require("sequelize");
-const conexao = require("../config/database");
-//boas
-let Veiculos = conexao.define(
-  "veiculos",
+const { DataTypes } = require("sequelize");
+const sequelize = require("../config/database");
+
+const Veiculo = sequelize.define(
+  "Veiculo",
   {
-    nome: {
-      type: sequelize.STRING,
-      allowNull: false,
-    },
     matricula: {
-      type: sequelize.STRING,
+      type: DataTypes.STRING,
       primaryKey: true,
-      autoIncrement: true,
       allowNull: false,
     },
     marca: {
-      type: sequelize.INTEGER,
+      type: DataTypes.STRING,
       allowNull: false,
     },
     modelo: {
-      type: sequelize.INTEGER,
+      type: DataTypes.STRING,
       allowNull: false,
     },
     cor: {
-      type: sequelize.STRING,
-      allowNull: false,
-    },
-    nif: {
-      type: sequelize.STRING,
+      type: DataTypes.STRING,
       allowNull: false,
     },
   },
   {
     tableName: "veiculos",
-    timestamps: true,
+    timestamps: false,
   }
 );
 
-module.exports = Veiculos;
+module.exports = Veiculo;
