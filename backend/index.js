@@ -18,6 +18,7 @@ app.use("/api/v1", require("./routes/clientes.route.js"));
 app.use("/api/v1", require("./routes/veiculos.route.js"));
 app.use("/api/v1", require("./routes/reparacoes.route.js"));
 app.use("/api/v1", require("./routes/material_utilizado.route.js"));
+app.use("/api/v1", require("./routes/auth.route.js"));
 
 app.listen(app.get("port"), () => {
   console.log("Servidor a correr na porta " + app.get("port"));

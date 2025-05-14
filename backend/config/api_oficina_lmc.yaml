@@ -497,6 +497,48 @@ paths:
 
 components:
   schemas:
+    /auth/login:
+      post:
+        summary: Autenticar utilizador
+        tags:
+          - autenticação
+        requestBody:
+          required: true
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  email:
+                    type: string
+                  password:
+                    type: string
+        responses:
+          '200':
+            description: Login com sucesso
+          '401':
+            description: Email ou password inválidos
+
+    /auth/register:
+      post:
+        summary: Registar novo utilizador
+        tags:
+          - autenticação
+        requestBody:
+          required: true
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  email:
+                    type: string
+                  password:
+                    type: string
+        responses:
+          '201':
+            description: Utilizador registado
+
     Clientes:
       required:
         - nif

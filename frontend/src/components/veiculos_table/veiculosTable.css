@@ -1,0 +1,82 @@
+.veiculos-card {
+    background: #fff;
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.05);
+    width: 480px;
+    margin-left: 30px;
+}
+
+.veiculos-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 16px;
+}
+
+.veiculos-header h5 {
+    font-size: 16px;
+    font-weight: bold;
+}
+
+.veiculos-header input {
+    padding: 6px 10px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    font-size: 14px;
+}
+
+.veiculos-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 14px;
+}
+
+.veiculos-table th,
+.veiculos-table td {
+    border: 1px solid #eee;
+    padding: 8px;
+    text-align: left;
+}
+
+.veiculos-table th {
+    background-color: #f3f4f6;
+    font-weight: 600;
+}
+.veiculos-controls {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+
+.veiculos-controls input {
+    padding: 6px 10px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    font-size: 14px;
+}
+
+.veiculos-controls button {
+    
+    background-color: #1d4ed8;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+.veiculos-controls button:hover {
+    background-color: #2563eb; }
+
+.veiculos-controls button {
+  padding: 6px 12px;
+  background-color: #1d4ed8;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.veiculos-controls button:hover {
+  background-color: #2563eb;
+}
