@@ -1,0 +1,29 @@
+.veiculos-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 16px;
+}
+
+.veiculos-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 14px;
+}
+
+.veiculos-table th,
+.veiculos-table td {
+    border: 1px solid #eee;
+    padding: 8px;
+    text-align: left;
+}
+
+.veiculos-table th {
+    background-color: #f3f4f6;
+    font-weight: 600;
+}
+.veiculos-controls {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}

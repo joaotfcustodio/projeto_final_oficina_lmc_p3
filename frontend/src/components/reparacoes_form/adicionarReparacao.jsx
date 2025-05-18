@@ -1,4 +1,10 @@
 import { useState } from "react";
+
+// Components
+import Button from "@/components/ui/button";
+import Input from "@/components/ui/input";
+
+// Styles
 import "./ReparacoesForm.css";
 
 const servicosDisponiveis = [
@@ -56,21 +62,22 @@ const AdicionarReparacao = ({ onAdicionar }) => {
 
   return (
     <form className="reparacao-form" onSubmit={handleSubmit}>
-      <h5>Adicionar Reparação</h5>
-      <input
-        type="text"
-        placeholder="Matrícula do veículo"
-        value={matricula}
-        onChange={(e) => setMatricula(e.target.value)}
-        required
-      />
-      <input
-        type="number"
-        placeholder="Preço em euros"
-        value={preco}
-        onChange={(e) => setPreco(e.target.value)}
-        required
-      />
+      <div className="reparacao-form-inputs">
+        <Input
+          type="text"
+          placeholder="Matrícula do veículo"
+          value={matricula}
+          onChange={(e) => setMatricula(e.target.value)}
+          required
+        />
+        <Input
+          type="number"
+          placeholder="Preço em euros"
+          value={preco}
+          onChange={(e) => setPreco(e.target.value)}
+          required
+        />
+      </div>
       <div className="checkbox-grid">
         {servicosDisponiveis.map((servico) => (
           <label key={servico}>
@@ -83,7 +90,7 @@ const AdicionarReparacao = ({ onAdicionar }) => {
           </label>
         ))}
       </div>
-      <button type="submit">Guardar Reparação</button>
+      <Button type="submit">Adicionar Reparação</Button>
     </form>
   );
 };

@@ -1,0 +1,9 @@
+.veiculos-container {
+  display: grid;
+  grid-template-columns: 0.5fr 1fr;
+  gap: 20px;
+}
+
+.veiculos-title {
+  margin-bottom: 40px;
+}

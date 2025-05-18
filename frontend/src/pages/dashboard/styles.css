@@ -1,0 +1,36 @@
+.dashboard-container {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20px;
+}
+
+.dashboard-title {
+  margin-bottom: 40px;
+}
+.reparacao-wrapper {
+  width: 100%;
+  padding: 0 24px;
+  box-sizing: border-box;
+  margin-top: 20px;
+}
+
+.reparacao-table {
+  width: 100%;
+  border-collapse: collapse;
+  background-color: #fff;
+}
+
+.reparacao-table th,
+.reparacao-table td {
+  padding: 12px;
+  text-align: center;
+  border: 1px solid #ddd;
+}
+
+.reparacao-table tbody tr:nth-child(even) {
+  background-color: #f9f9f9;
+}
+
+.reparacao-table tbody tr:hover {
+  background-color: #f1f1f1;
+}

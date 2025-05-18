@@ -1,7 +1,13 @@
 // src/components/veiculos_form/VeiculoTable.jsx
 import { useEffect, useState } from "react";
 import axios from "axios";
-import "./VeiculosTable.css";
+
+// Components
+import Button from "@/components/ui/button";
+import Input from "@/components/ui/input";
+
+// Styles
+import "./styles.css";
 
 const VeiculoTable = () => {
   const [veiculos, setVeiculos] = useState([]);
@@ -21,7 +27,7 @@ const VeiculoTable = () => {
       });
       setVeiculos(res.data.data || []);
       setResultado(res.data.data || []);
-    } catch (err) {
+    } catch {
       alert("Erro ao carregar veículos.");
     }
   };
@@ -41,19 +47,17 @@ const VeiculoTable = () => {
   return (
     <div className="veiculos-card">
       <div className="veiculos-header">
-        <h5>Veículos</h5>
         <div className="veiculos-controls">
-          <input
+          <Input
             type="text"
             placeholder="Filtrar por matrícula"
             value={filtro}
             onChange={(e) => setFiltro(e.target.value)}
           />
-          <button onClick={handleProcurar}>Procurar</button>
-          <button onClick={handleListarTodos}>Listar Todos</button>
+          <Button onClick={handleProcurar}>Procurar</Button>
+          <Button onClick={handleListarTodos}>Listar Todos</Button>
         </div>
       </div>
-
       <table className="veiculos-table">
         <thead>
           <tr>

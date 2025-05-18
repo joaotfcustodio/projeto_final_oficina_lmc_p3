@@ -1,0 +1,9 @@
+.materiais-utilizados-container {
+  display: grid;
+  grid-template-columns: 0.5fr 1fr;
+  gap: 20px;
+}
+
+.materiais-utilizados-title {
+  margin-bottom: 40px;
+}

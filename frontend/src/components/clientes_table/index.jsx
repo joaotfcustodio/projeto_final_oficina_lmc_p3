@@ -1,11 +1,18 @@
 // src/components/clientes/ClienteTable.jsx
 import { useEffect, useState } from "react";
 import axios from "axios";
-import "./ClienteTable.css";
+
+// Components
+import Input from "@/components/ui/input";
+import Button from "@/components/ui/button";
+
+// Styles
+import "./styles.css";
 
 const ClienteTable = () => {
   const [clientes, setClientes] = useState([]);
   const [filtro, setFiltro] = useState("");
+  const [resultado, setResultado] = useState([]);
 
   useEffect(() => {
     fetchClientes();
@@ -19,7 +26,7 @@ const ClienteTable = () => {
         },
       });
       setClientes(res.data.data || []);
-    } catch (err) {
+    } catch {
       alert("Erro ao carregar clientes.");
     }
   };
@@ -44,22 +51,22 @@ if (clientes.length === 0) {
     },
   ]);
 }
+const handleProcurar = () => {
+  const clienteEncontrado = clientes.filter(
+    (v) => v.nif.toLowerCase() === filtro.toLowerCase()
+  );
+  setResultado(clienteEncontrado);
+};
 
   return (
-    <div className="clientes-card">
-      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-        <h5>Clientes</h5>
-        <input
-          type="text"
-          placeholder="Filtrar por NIF"
-          value={filtro}
-          onChange={(e) => setFiltro(e.target.value)}
-          style={{
-            border: "1px solid #ccc",
-            padding: "5px 10px",
-            borderRadius: "6px",
-          }}
-        />
+    <><div className="clientes-controls">
+      <Input
+        type="text"
+        placeholder="Filtrar por NIF"
+        value={filtro}
+        onChange={(e) => setFiltro(e.target.value)}
+      />
+      <Button onClick={handleProcurar}>Procurar</Button>
       </div>
       <table className="clientes-table">
         <thead>
@@ -81,7 +88,7 @@ if (clientes.length === 0) {
           ))}
         </tbody>
       </table>
-    </div>
+    </>
   );
 };
 

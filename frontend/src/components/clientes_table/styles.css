@@ -1,20 +1,3 @@
-.clientes-card {
-    background: white;
-    padding: 20px;
-    border-radius: 12px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-    width: 100%;
-    max-width: 600px;
-    margin-left: 20px;
-    box-sizing: border-box;
-}
-
-.clientes-card h5 {
-    font-size: 16px;
-    font-weight: bold;
-    margin-bottom: 10px;
-}
-
 .clientes-card input {
     border: 1px solid #ccc;
     padding: 6px 10px;
@@ -42,4 +25,9 @@
 
 .clientes-table tr:hover {
     background-color: #f9f9f9;
+}
+.clientes-controls {
+    display: flex;
+    gap: 10px;
+    align-items: center;
 }

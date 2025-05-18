@@ -1,15 +1,24 @@
 import React from "react";
-import Sidebar from "../../components/navbar";
-import MaterialUtilizadoForm from "../../components/material_utilizado_form/MaterialUtilizadoForm";
+
+// Components
+import Card from "@/components/card";
+import MaterialUtilizadoForm from "@/components/material_utilizado_form/index";
+import ReparacaoTable from "@/components/material_utilizado_form/material_utilizado_table";
+// Styles
+import "./styles.css";
 
 const MateriaisUtilizadosPage = () => {
   return (
-    <div style={{ display: "flex", height: "100vh" }}>
-      <Sidebar />
-      <div style={{ flex: 1, padding: "20px", textAlign: "center" }}>
-        <h2 style={{ marginBottom: "20px" }}>ÁREA DE MATERIAIS UTILIZADOS</h2>
+    <div className="materiais-utilizados-page">
+      <h1 className="materiais-utilizados-title">
+        ÁREA DE MATERIAIS UTILIZADOS
+      </h1>
+      <Card title="Adicionar Material Utilizado">
         <MaterialUtilizadoForm />
-      </div>
+      </Card>
+      <Card title="Procurar Reparações e Material Utilizado">
+        <ReparacaoTable />
+      </Card>
     </div>
   );
 };

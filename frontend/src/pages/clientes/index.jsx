@@ -1,23 +1,28 @@
 import React from "react";
-import Sidebar from "../../components/navbar";
-import ClienteForm from "../../components/clientes_form/ClienteForm";
-import ClienteTable from "../../components/clientes_table/ClienteTable";
-import "./clientes.css";
+
+// Components
+import Card from "@/components/card";
+import ClienteForm from "@/components/clientes_form";
+import ClienteTable from "@/components/clientes_table";
+
+// Styles
+import "./styles.css";
 
 const ClientesPage = () => {
-    return (
-      <div style={{ display: "flex" }}>
-        <Sidebar />
-  
-        {/* Este marginLeft empurra o conteúdo para o lado da sidebar fixa */}
-        <div style={{ marginLeft: "200px", padding: "20px", width: "100%" }}>
-        <h1 style={{ marginBottom: "30px", fontSize: "28px" }}>ÁREA DE CLIENTE</h1>
-          <div className="clientes-container" style={{ display: "flex", gap: "40px" }}>
-            <ClienteForm />
-            <ClienteTable />
-          </div>
-        </div>
+  return (
+    <div className="clientes-page">
+      <h1 className="clientes-title">
+        ÁREA DE CLIENTE
+      </h1>
+      <div className="clientes-container">
+        <Card title="Adicionar Cliente">
+          <ClienteForm />
+        </Card>
+        <Card title="Lista de Clientes">
+          <ClienteTable />
+        </Card>
       </div>
-    );
-  };
-  export default ClientesPage;
+    </div>
+  );
+};
+export default ClientesPage;

@@ -1,8 +1,13 @@
 // src/pages/reparacoes/index.jsx
 import React, { useState } from "react";
-import Sidebar from "../../components/navbar";
-import AdicionarReparacao from "../../components/reparacoes_form/adicionarReparacao";
-import ReparacaoForm from "../../components/reparacoes_form/ReparacoesForm";
+
+// Components
+import AdicionarReparacao from "@/components/reparacoes_form/adicionarReparacao";
+import Card from "@/components/card";
+import ReparacaoForm from "@/components/reparacoes_form/ReparacoesForm";
+
+// Styles
+import "./styles.css";
 
 const ReparacoesPage = () => {
   const [reparacoes, setReparacoes] = useState([]);
@@ -12,12 +17,17 @@ const ReparacoesPage = () => {
   };
 
   return (
-    <div style={{ display: "flex", height: "100vh" }}>
-      <Sidebar />
-      <div style={{ flex: 1, padding: "20px", textAlign: "center" }}>
-        <h2 style={{ marginBottom: "20px" }}>ÁREA DE REPARAÇÕES</h2>
-        <AdicionarReparacao onAdicionar={handleAdicionarReparacao} />
-        <ReparacaoForm reparacoesExternas={reparacoes} />
+    <div className="reparacoes-page">
+      <h1 className="reparacoes-title">
+        ÁREA DE REPARAÇÕES
+      </h1>
+      <div className="reparacoes-container">
+        <Card title="Adicionar Reparação">
+          <AdicionarReparacao onAdicionar={handleAdicionarReparacao} />
+        </Card>
+        <Card title="Reparações">
+          <ReparacaoForm reparacoesExternas={reparacoes} />
+        </Card>
       </div>
     </div>
   );

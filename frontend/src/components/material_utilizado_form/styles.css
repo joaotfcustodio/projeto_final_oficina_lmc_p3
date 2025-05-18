@@ -1,0 +1,38 @@
+.form-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin-bottom: 1.5rem;
+}
+.materiais-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+.materiais-table th,
+.materiais-table td {
+    text-align: center;
+    /* Centralizar conteúdo */
+    padding: 10px;
+    border: 1px solid #ddd;
+}
+
+.materiais-table thead {
+    background-color: #f4f4f4;
+    /* Cabeçalho cinzento claro */
+}
+
+.materiais-table tbody tr:nth-child(even) {
+    background-color: #f9f9f9;
+    /* Linhas pares com tom mais claro */
+}
+
+.materiais-table tbody tr:nth-child(odd) {
+    background-color: #ffffff;
+    /* Linhas ímpares brancas */
+}
+
+.materiais-table th {
+    font-weight: bold;
+}
