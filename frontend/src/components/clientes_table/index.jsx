@@ -15,10 +15,10 @@ const ClienteTable = () => {
   const [resultado, setResultado] = useState([]);
 
   useEffect(() => {
-    fetchClientes();
+    carregarClientes();
   }, []);
 
-  const fetchClientes = async () => {
+  const carregarClientes = async () => {
     try {
       const res = await axios.get("http://localhost:5000/api/v1/clientes", {
         headers: {
@@ -26,47 +26,46 @@ const ClienteTable = () => {
         },
       });
       setClientes(res.data.data || []);
-    } catch {
-      alert("Erro ao carregar clientes.");
+    } catch (error) {
+      console.error("Erro ao carregar clientes:", error);
+      setClientes([
+        {
+          nif: "123456789",
+          nome: "Ana Silva",
+          data_registo: "2024-05-14",
+          morada: "Rua da Liberdade 12",
+        },
+        {
+          nif: "987654321",
+          nome: "Carlos Lopes",
+          data_registo: "2023-12-01",
+          morada: "Av. Central 45",
+        },
+      ]);
     }
+  };
+
+  const handleProcurar = () => {
+    const clienteEncontrado = clientes.filter(
+      (v) => v.nif.toLowerCase() === filtro.toLowerCase()
+    );
+    setResultado(clienteEncontrado);
   };
 
   const clientesFiltrados = clientes.filter((cliente) =>
     cliente.nif.includes(filtro)
   );
-// Dados fictícios se lista estiver vazia (para efeitos visuais)
-if (clientes.length === 0) {
-  setClientes([
-    {
-      nif: "123456789",
-      nome: "Ana Silva",
-      data_registo: "2024-05-14",
-      morada: "Rua da Liberdade 12",
-    },
-    {
-      nif: "987654321",
-      nome: "Carlos Lopes",
-      data_registo: "2023-12-01",
-      morada: "Av. Central 45",
-    },
-  ]);
-}
-const handleProcurar = () => {
-  const clienteEncontrado = clientes.filter(
-    (v) => v.nif.toLowerCase() === filtro.toLowerCase()
-  );
-  setResultado(clienteEncontrado);
-};
 
   return (
-    <><div className="clientes-controls">
-      <Input
-        type="text"
-        placeholder="Filtrar por NIF"
-        value={filtro}
-        onChange={(e) => setFiltro(e.target.value)}
-      />
-      <Button onClick={handleProcurar}>Procurar</Button>
+    <>
+      <div className="clientes-controls">
+        <Input
+          type="text"
+          placeholder="Filtrar por NIF"
+          value={filtro}
+          onChange={(e) => setFiltro(e.target.value)}
+        />
+        <Button onClick={handleProcurar}>Procurar</Button>
       </div>
       <table className="clientes-table">
         <thead>

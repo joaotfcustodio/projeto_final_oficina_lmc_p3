@@ -15,20 +15,46 @@ const VeiculoTable = () => {
   const [resultado, setResultado] = useState([]);
 
   useEffect(() => {
-    fetchVeiculos();
+    carregarVeiculos();
   }, []);
 
-  const fetchVeiculos = async () => {
+  const carregarVeiculos = async () => {
     try {
       const res = await axios.get("http://localhost:5000/api/v1/veiculos", {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
       });
-      setVeiculos(res.data.data || []);
-      setResultado(res.data.data || []);
-    } catch {
-      alert("Erro ao carregar veículos.");
+      const data = res.data.data || [];
+      setVeiculos(data);
+      setResultado(data);
+    } catch (error) {
+      console.error("Erro ao carregar veículos:", error);
+      const dadosFicticios = [
+        {
+          matricula: "12-AB-34",
+          marca: "Volkswagen",
+          modelo: "Golf",
+          ano: 2018,
+          nif_cliente: "123456789",
+        },
+        {
+          matricula: "56-CD-78",
+          marca: "Renault",
+          modelo: "Clio",
+          ano: 2020,
+          nif_cliente: "987654321",
+        },
+        {
+          matricula: "90-EF-12",
+          marca: "Peugeot",
+          modelo: "208",
+          ano: 2022,
+          nif_cliente: "456123789",
+        },
+      ];
+      setVeiculos(dadosFicticios);
+      setResultado(dadosFicticios);
     }
   };
 
@@ -80,29 +106,9 @@ const VeiculoTable = () => {
               </tr>
             ))
           ) : (
-            <>
-              <tr>
-                <td>12-AB-34</td>
-                <td>Volkswagen</td>
-                <td>Golf</td>
-                <td>2018</td>
-                <td>123456789</td>
-              </tr>
-              <tr>
-                <td>56-CD-78</td>
-                <td>Renault</td>
-                <td>Clio</td>
-                <td>2020</td>
-                <td>987654321</td>
-              </tr>
-              <tr>
-                <td>90-EF-12</td>
-                <td>Peugeot</td>
-                <td>208</td>
-                <td>2022</td>
-                <td>456123789</td>
-              </tr>
-            </>
+            <tr>
+              <td colSpan="5">Nenhum veículo encontrado.</td>
+            </tr>
           )}
         </tbody>
       </table>
