@@ -8,7 +8,7 @@ import Input from "@/components/ui/input";
 import "./styles.css";
 
 const formatWithUnit = (value, unit) => {
-  return value || value === 0 ? `${value} ${unit}` : "-";
+  return value || value === 0 ? `${value} ${unit}` : "—";
 };
 
 const MaterialUtilizadoTable = ({ onEditar }) => {
@@ -61,7 +61,7 @@ const MaterialUtilizadoTable = ({ onEditar }) => {
   return (
     <>
       <div className="materiais-header">
-        <div style={{ display: "flex", gap: "8px", alignItems: "center" }}>
+        <div style={{ display: "flex", gap: "0.5rem", alignItems: "center" }}>
           <Input
             type="text"
             placeholder="Filtrar por ID de reparação"
@@ -69,81 +69,83 @@ const MaterialUtilizadoTable = ({ onEditar }) => {
             onChange={(e) => setFiltro(e.target.value)}
           />
           <Button title="Procurar" variant="icon" onClick={procurarMaterialPorId}>
-            <SearchIcon style={{ height: "20px", width: "20px" }} />
+            <SearchIcon style={{ height: "1.25rem", width: "1.25rem" }} />
           </Button>
         </div>
       </div>
 
-      <table className="materiais-table">
-        <thead>
-          <tr>
-            <th>ID Reparacão</th>
-            <th>Matrícula</th>
-            <th>Marca</th>
-            <th>Modelo</th>
-            <th>Marca Tinta</th>
-            <th>Qtd. Tinta (L)</th>
-            <th>Qtd. Tinta Jantes (L)</th>
-            <th>Qtd. Verniz (L)</th>
-            <th>Qtd. Gasóleo Estufa (L)</th>
-            <th>Marca Verniz</th>
-            <th>Massa de Polimento (kg)</th>
-            <th>Preço Tinta Carro (€)</th>
-            <th>Preço Verniz Carro (€)</th>
-            <th>Preço Tinta Jantes (€)</th>
-            <th>Preço Gásóleo Estufa (€)</th>
-            <th>Preço Total (€)</th>
-            <th>Ações</th>
-          </tr>
-        </thead>
-        <tbody>
-          {materiais.map((m, index) => {
-            const veiculo = m.Reparacao?.Veiculo || {};
-            return (
-              <tr key={index}>
-                <td>#{m.id_reparacao}</td>
-                <td>{veiculo.matricula || "-"}</td>
-                <td>{veiculo.marca || "-"}</td>
-                <td>{veiculo.modelo || "-"}</td>
-                <td>{m.marca_tinta || "-"}</td>
-                <td>{formatWithUnit(m.quantidade_tinta, "L")}</td>
-                <td>{formatWithUnit(m.quantidade_tinta_jantes, "L")}</td>
-                <td>{formatWithUnit(m.quantidade_verniz, "L")}</td>
-                <td>{formatWithUnit(m.quantidade_gasoleo_estufa, "L")}</td>
-                <td>{m.marca_verniz || "-"}</td>
-                <td>{formatWithUnit(m.massa_polimento, "kg")}</td>
-                <td>{formatWithUnit(m.preco_tinta_carro, "€")}</td>
-                <td>{formatWithUnit(m.preco_verniz_carro, "€")}</td>
-                <td>{formatWithUnit(m.preco_tinta_jantes, "€")}</td>
-                <td>{formatWithUnit(m.preco_gasoleo_estufa_lt, "€")}</td>
-                <td>{formatWithUnit(m.preco_total_material_carro, "€")}</td>
-                <td>
-                  <div style={{ display: "flex", gap: "10px" }}>
-                    <Button
-                      title="Editar"
-                      variant="icon"
-                      onClick={() => onEditar(m)}
-                    >
-                      <EditIcon style={{ height: "20px", width: "20px" }} />
-                    </Button>
-                    <Button
-                      title="Eliminar"
-                      variant="icon"
-                      theme="secondary"
-                      onClick={() => eliminarMaterial(m.id_reparacao)}
-                    >
-                      <DeleteIcon
-                        color="error"
-                        style={{ height: "20px", width: "20px" }}
-                      />
-                    </Button>
-                  </div>
-                </td>
-              </tr>
-            );
-          })}
-        </tbody>
-      </table>
+      <div style={{ overflowX: "auto" }}>
+        <table className="materiais-table" style={{ width: "100%", fontSize: "0.875rem", borderCollapse: "collapse" }}>
+          <thead>
+            <tr>
+              <th>ID Reparacão</th>
+              <th>Matrícula</th>
+              <th>Marca</th>
+              <th>Modelo</th>
+              <th>Marca Tinta</th>
+              <th>Qtd. Tinta (L)</th>
+              <th>Qtd. Tinta Jantes (L)</th>
+              <th>Qtd. Verniz (L)</th>
+              <th>Qtd. Gasóleo Estufa (L)</th>
+              <th>Marca Verniz</th>
+              <th>Massa de Polimento (kg)</th>
+              <th>Preço Tinta Carro (€)</th>
+              <th>Preço Verniz Carro (€)</th>
+              <th>Preço Tinta Jantes (€)</th>
+              <th>Preço Gásóleo Estufa (€)</th>
+              <th>Preço Total (€)</th>
+              <th>Ações</th>
+            </tr>
+          </thead>
+          <tbody>
+            {materiais.map((m, index) => {
+              const veiculo = m.Reparacao?.Veiculo || {};
+              return (
+                <tr key={index}>
+                  <td>#{m.id_reparacao}</td>
+                  <td>{veiculo.matricula || "—"}</td>
+                  <td>{veiculo.marca || "—"}</td>
+                  <td>{veiculo.modelo || "—"}</td>
+                  <td>{m.marca_tinta || "—"}</td>
+                  <td>{formatWithUnit(m.quantidade_tinta, "L")}</td>
+                  <td>{formatWithUnit(m.quantidade_tinta_jantes, "L")}</td>
+                  <td>{formatWithUnit(m.quantidade_verniz, "L")}</td>
+                  <td>{formatWithUnit(m.quantidade_gasoleo_estufa, "L")}</td>
+                  <td>{m.marca_verniz || "—"}</td>
+                  <td>{formatWithUnit(m.massa_polimento, "kg")}</td>
+                  <td>{formatWithUnit(m.preco_tinta_carro, "€")}</td>
+                  <td>{formatWithUnit(m.preco_verniz_carro, "€")}</td>
+                  <td>{formatWithUnit(m.preco_tinta_jantes, "€")}</td>
+                  <td>{formatWithUnit(m.preco_gasoleo_estufa_lt, "€")}</td>
+                  <td>{formatWithUnit(m.preco_total_material_carro, "€")}</td>
+                  <td>
+                    <div style={{ display: "flex", gap: "0.625rem" }}>
+                      <Button
+                        title="Editar"
+                        variant="icon"
+                        onClick={() => onEditar(m)}
+                      >
+                        <EditIcon style={{ height: "1.25rem", width: "1.25rem" }} />
+                      </Button>
+                      <Button
+                        title="Eliminar"
+                        variant="icon"
+                        theme="secondary"
+                        onClick={() => eliminarMaterial(m.id_reparacao)}
+                      >
+                        <DeleteIcon
+                          color="error"
+                          style={{ height: "1.25rem", width: "1.25rem" }}
+                        />
+                      </Button>
+                    </div>
+                  </td>
+                </tr>
+              );
+            })}
+          </tbody>
+        </table>
+      </div>
     </>
   );
 };

@@ -1,29 +1,45 @@
 .veiculos-header {
     display: flex;
-    flex-direction: row;
-    gap: 12px;
-    width: 100%;
+    gap: 0.75rem;
+    align-items: center;
+    margin-bottom: 1rem;
+}
+
+.erro-msg {
+    color: #b00020;
     margin-bottom: 1rem;
 }
 
 .veiculos-nif-scroll-container {
+    border: 0.0625rem solid #ddd;
+    border-radius: 0.5rem;
+    overflow: hidden;
+}
+
+.veiculos-scroll-body {
     max-height: 20rem;
     overflow-y: auto;
     overflow-x: auto;
-    border: 1px solid #ddd;
-    border-radius: 0.5rem;
 }
 
 .veiculos-table {
     width: 100%;
     border-collapse: collapse;
-    min-width: 40rem;
+    table-layout: fixed;
     font-size: 0.9rem;
+    min-width: 40rem;
 }
 
 .veiculos-table th,
 .veiculos-table td {
     padding: 0.75rem 1rem;
-    text-align: left;
-    border-bottom: 1px solid #e0e0e0;
+    border-bottom: 0.0625rem solid #e0e0e0;
+    text-align: center;
+}
+
+.veiculos-table th {
+    background-color: #f5f5f5;
+    position: sticky;
+    top: 0;
+    z-index: 1;
 }

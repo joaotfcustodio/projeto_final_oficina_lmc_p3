@@ -36,7 +36,7 @@ const VeiculosPorClienteTable = () => {
     <div className="clientes-card">
       <h5>Procurar Veículos por Cliente</h5>
 
-      <div className="veiculos-header" style={{ display: "flex", gap: "0.75rem", alignItems: "center", marginBottom: "1rem" }}>
+      <div className="veiculos-header">
         <Input
           placeholder="Introduza o NIF do cliente"
           value={nifBusca}
@@ -48,15 +48,14 @@ const VeiculosPorClienteTable = () => {
       </div>
 
       {erro && (
-        <div style={{ color: "#b00020", marginBottom: "1rem" }}>{erro}</div>
+        <div className="erro-msg">{erro}</div>
       )}
 
       {resultado ? (
         <>
           <p><strong>Cliente:</strong> {resultado.nome} ({resultado.nif})</p>
           {resultado.veiculos && resultado.veiculos.length > 0 ? (
-            <div className="veiculos-scroll-container">
-              <div className="veiculos-nif-scroll-container">
+            <div className="veiculos-nif-scroll-container">
               <table className="veiculos-table">
                 <thead>
                   <tr>
@@ -66,17 +65,20 @@ const VeiculosPorClienteTable = () => {
                     <th>Ano</th>
                   </tr>
                 </thead>
-                <tbody>
-                  {resultado.veiculos.map((v, idx) => (
-                    <tr key={idx}>
-                      <td>{v.matricula}</td>
-                      <td>{v.marca}</td>
-                      <td>{v.modelo}</td>
-                      <td>{v.ano}</td>
-                    </tr>
-                  ))}
-                </tbody>
               </table>
+              <div className="veiculos-scroll-body">
+                <table className="veiculos-table">
+                  <tbody>
+                    {resultado.veiculos.map((v, idx) => (
+                      <tr key={idx}>
+                        <td>{v.matricula}</td>
+                        <td>{v.marca}</td>
+                        <td>{v.modelo}</td>
+                        <td>{v.ano}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
               </div>
             </div>
           ) : (

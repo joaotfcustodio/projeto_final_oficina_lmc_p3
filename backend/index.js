@@ -12,10 +12,7 @@ app.use(express.json());
 app.use(cors());
 app.use(bodyParser.urlencoded({ extended: true }));
 
-// Sincronizar tabelas
-sequelize.sync({ alter: true }).then(() => {
-  console.log("Tabelas sincronizadas com sucesso.");
-});
+sequelize.sync().then(() => {});
 
 // Rotas
 app.use("/api/v1", require("./routes/clientes.route.js"));
