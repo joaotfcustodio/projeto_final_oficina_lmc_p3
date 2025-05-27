@@ -1,38 +1,51 @@
 .form-grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 10px;
+    gap: 0.625rem;
     margin-bottom: 1.5rem;
 }
+
 .materiais-table {
     width: 100%;
     border-collapse: collapse;
-    margin-top: 20px;
+    margin-top: 1.25rem;
 }
 
 .materiais-table th,
 .materiais-table td {
     text-align: center;
-    /* Centralizar conteúdo */
-    padding: 10px;
-    border: 1px solid #ddd;
+    padding: 0.625rem;
+    border: 0.0625rem solid #ddd; 
 }
 
 .materiais-table thead {
     background-color: #f4f4f4;
-    /* Cabeçalho cinzento claro */
 }
 
 .materiais-table tbody tr:nth-child(even) {
     background-color: #f9f9f9;
-    /* Linhas pares com tom mais claro */
 }
 
 .materiais-table tbody tr:nth-child(odd) {
     background-color: #ffffff;
-    /* Linhas ímpares brancas */
 }
 
 .materiais-table th {
     font-weight: bold;
+}
+
+.button-group {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 1rem;
+    margin-top: 1rem;
+}
+
+.small-button {
+    padding: 0.5rem 1rem;
+    font-size: 1rem;
+    height: 2.5rem;
+    width: 10rem;
+    
 }

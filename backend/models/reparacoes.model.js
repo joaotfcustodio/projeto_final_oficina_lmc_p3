@@ -1,7 +1,7 @@
 const { DataTypes } = require("sequelize");
-const conexao = require("../config/database");
+const sequelize = require("../config/database");
 
-const Reparacao = conexao.define(
+const Reparacao = sequelize.define(
   "Reparacao",
   {
     id_reparacao: {
@@ -12,6 +12,10 @@ const Reparacao = conexao.define(
     matricula: {
       type: DataTypes.STRING,
       allowNull: false,
+      references: {
+        model: "veiculos",
+        key: "matricula",
+      },
     },
     pintura_geral: DataTypes.BOOLEAN,
     pintura_de_para_choques_dianteiro: DataTypes.BOOLEAN,

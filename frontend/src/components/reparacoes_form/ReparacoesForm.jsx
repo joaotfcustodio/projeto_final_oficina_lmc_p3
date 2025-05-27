@@ -17,7 +17,6 @@ const ReparacaoForm = ({
 }) => {
   const [mensagem, setMensagem] = useState(null);
   const [reparacoes, setReparacoes] = useState(reparacoesExternas);
-
   const [matriculaInterna, setMatriculaInterna] = useState("");
   const matricula = matriculaFiltro ?? matriculaInterna;
   const setMatricula = setMatriculaFiltro ?? setMatriculaInterna;
@@ -44,6 +43,9 @@ const ReparacaoForm = ({
   };
 
   const eliminarReparacao = async (id) => {
+    const confirmar = window.confirm("Tem a certeza que pretende eliminar esta reparação?");
+    if (!confirmar) return;
+
     try {
       const headers = {
         Authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -108,10 +110,7 @@ const ReparacaoForm = ({
                 <td>{r.preco} €</td>
                 <td style={{ verticalAlign: "top" }}>
                   {Object.entries(r)
-                    .filter(
-                      ([campo, valor]) =>
-                        typeof valor === "boolean" && valor === true
-                    )
+                    .filter(([campo, valor]) => typeof valor === "boolean" && valor === true)
                     .map(([campo]) => (
                       <div key={campo}>✔ {formatarCampo(campo)}</div>
                     ))}

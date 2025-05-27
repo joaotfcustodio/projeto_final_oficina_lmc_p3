@@ -4,7 +4,9 @@ const Reparacao = require("./reparacoes.model");
 const MaterialUtilizado = require("./material_utilizado.model");
 const ClientesVeiculos = require("./clientes_veiculos.model");
 
+//
 // Cliente <-> Veiculo (N:M)
+//
 Cliente.belongsToMany(Veiculo, {
   through: ClientesVeiculos,
   foreignKey: "clienteNif",
@@ -18,7 +20,10 @@ Veiculo.belongsToMany(Cliente, {
   otherKey: "clienteNif",
   as: "clientes",
 });
+
+//
 // Veiculo -> Reparacao (1:N)
+//
 Veiculo.hasMany(Reparacao, {
   foreignKey: "matricula",
   sourceKey: "matricula",
@@ -28,9 +33,12 @@ Veiculo.hasMany(Reparacao, {
 Reparacao.belongsTo(Veiculo, {
   foreignKey: "matricula",
   targetKey: "matricula",
+  as: "veiculo",
 });
 
+//
 // Reparacao -> MaterialUtilizado (1:1)
+//
 Reparacao.hasOne(MaterialUtilizado, {
   foreignKey: "id_reparacao",
   as: "material_utilizado",
@@ -38,4 +46,5 @@ Reparacao.hasOne(MaterialUtilizado, {
 
 MaterialUtilizado.belongsTo(Reparacao, {
   foreignKey: "id_reparacao",
+  as: "reparacao",
 });

@@ -1,5 +1,6 @@
 const MaterialUtilizado = require("../models/material_utilizado.model");
 const Reparacao = require("../models/reparacoes.model");
+const Veiculo = require("../models/veiculos.model");
 
 const endpointsFunction = {};
 
@@ -94,6 +95,29 @@ endpointsFunction.getMaterialByReparacao = async (req, res) => {
     res.status(500).json({
       status: "error",
       message: "Erro ao obter material utilizado.",
+      error: err.message,
+    });
+  }
+};
+
+// ✅ Obter todos os materiais com info da reparação e veículo
+endpointsFunction.getMateriaisComVeiculo = async (req, res) => {
+  try {
+    const materiais = await MaterialUtilizado.findAll({
+      include: {
+        model: Reparacao,
+        include: Veiculo,
+      },
+    });
+
+    res.status(200).json({
+      status: "success",
+      materiais,
+    });
+  } catch (err) {
+    res.status(500).json({
+      status: "error",
+      message: "Erro ao obter materiais com informação do veículo.",
       error: err.message,
     });
   }

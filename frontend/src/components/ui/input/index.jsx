@@ -1,4 +1,3 @@
-// Styles
 import "./styles.css";
 
 const Input = ({
@@ -7,7 +6,8 @@ const Input = ({
   onChange = () => {},
   placeholder = "",
   type = "text",
-  value = "",
+  value,
+  ...rest
 }) => {
   return (
     <input
@@ -15,8 +15,9 @@ const Input = ({
       name={name}
       placeholder={placeholder}
       type={type}
-      value={value}
+      value={value || ""} 
       onChange={onChange}
+      {...rest}
     />
   );
 };
