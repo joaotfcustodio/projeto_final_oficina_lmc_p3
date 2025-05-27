@@ -100,7 +100,7 @@ endpointsFunction.getMaterialByReparacao = async (req, res) => {
   }
 };
 
-// ✅ Obter todos os materiais com info da reparação e veículo
+// Obter todos os materiais com info da reparação e veículo
 endpointsFunction.getMateriaisComVeiculo = async (req, res) => {
   try {
     const materiais = await MaterialUtilizado.findAll({

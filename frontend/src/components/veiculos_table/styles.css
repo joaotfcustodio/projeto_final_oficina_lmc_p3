@@ -26,8 +26,26 @@
 .veiculos-table th,
 .veiculos-table td {
     padding: 0.75rem 1rem;
+    border: 0.0625rem solid #ddd;
+    /* Divisões entre todas as células */
+}
+
+.veiculos-table th {
+    text-align: center;
+    background-color: #f4f4f4;
+    font-weight: bold;
+}
+
+.veiculos-table td {
     text-align: left;
-    border-bottom: 0.0625rem solid #e0e0e0;
+}
+
+.veiculos-table tr:nth-child(even) {
+    background-color: #fafafa;
+}
+
+.veiculos-table tr:hover {
+    background-color: #f0f0f0;
 }
 
 .veiculo-actions {
@@ -49,7 +67,6 @@
     justify-content: center;
 }
 
-/* Tamanho do ícone */
 .veiculo-button svg {
     font-size: 1rem;
 }

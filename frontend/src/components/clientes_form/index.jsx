@@ -14,7 +14,7 @@ const ClienteForm = ({ clienteSelecionado, onCreated, resetClienteSelecionado })
   });
 
   const [mensagem, setMensagem] = useState(null);
-  const [tipoMensagem, setTipoMensagem] = useState(null); // "success" ou "error"
+  const [tipoMensagem, setTipoMensagem] = useState(null); 
 
   // Preencher form se estiver em modo edição
   useEffect(() => {

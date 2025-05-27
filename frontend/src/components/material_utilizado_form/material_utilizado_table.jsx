@@ -1,4 +1,3 @@
-// MaterialUtilizadoTable.jsx
 import { useState } from "react";
 import axios from "axios";
 import EditIcon from "@mui/icons-material/Edit";

@@ -25,10 +25,9 @@ const LoginUi = () => {
 
       const { AccessToken } = response.data;
 
-      // Guarda o token para uso posterior (ex: headers nas requests)
       localStorage.setItem("token", AccessToken);
 
-      // Redireciona para a página protegida
+    
       navigate("/clientes");
     } catch (err) {
       setErro("Email ou password incorretos, ou conta não registada.");
@@ -38,11 +37,17 @@ const LoginUi = () => {
   return (
     <Container maxWidth="sm" sx={{ mt: 4 }}>
       <Box sx={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
-        <img
-          src={oficinaLogo}
-          alt="Logo Oficina"
-          style={{ width: 250, marginBottom: 20 }}
-        />
+      <img
+         src={oficinaLogo}
+         alt="Logo Oficina"
+         style={{
+         width: "100%",
+         maxWidth: "100%",
+         height: "20rem", 
+         objectFit: "contain",
+         marginBottom: "1.5rem"
+  }}
+/>
         {!mostrarRegisto ? (
           <>
             <Box component="form" noValidate onSubmit={handleLogin} sx={{ width: "100%" }}>

@@ -1,4 +1,3 @@
-// Components
 import Card from "@/components/card";
 import ClienteTable from "@/components/clientes_table";
 import ReparacaoForm from "@/components/reparacoes_form/ReparacoesForm";
@@ -6,7 +5,6 @@ import VeiculoTable from "@/components/veiculos_table";
 import VeiculosPorClienteTable from "@/components/veiculos_por_cliente_table/index";
 import MaterialUtilizadoTable from "@/components/material_utilizado_form/material_utilizado_table";
 
-// Styles
 import "./styles.css";
 
 const Dashboard = () => {

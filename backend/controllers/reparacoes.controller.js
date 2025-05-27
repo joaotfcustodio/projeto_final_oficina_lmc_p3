@@ -96,11 +96,11 @@ endpointsFunction.getReparacoesByMatricula = async (req, res) => {
       include: [
         {
           model: Reparacao,
-          as: "reparacoes", // <-- usa o alias da associação
+          as: "reparacoes",
           include: [
             {
               model: MaterialUtilizado,
-              as: "material_utilizado", // <-- usa o alias da associação
+              as: "material_utilizado",
             },
           ],
         },

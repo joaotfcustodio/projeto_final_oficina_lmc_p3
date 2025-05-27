@@ -1,12 +1,12 @@
 import { useState } from "react";
 
-// Components
+
 import Card from "@/components/card";
 import VeiculoForm from "@/components/veiculos_form";
 import VeiculoTable from "@/components/veiculos_table";
 import VeiculosPorClienteTable from "@/components/veiculos_por_cliente_table";
 
-// Styles
+
 import "./styles.css";
 
 const VeiculosPage = () => {

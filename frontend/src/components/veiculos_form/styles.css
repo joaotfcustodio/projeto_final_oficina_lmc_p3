@@ -2,10 +2,9 @@
     display: flex;
     flex-direction: column;
     gap: 0.75rem;
-    /* Espaço entre inputs */
     width: 100%;
     margin-top: 1rem;
-    /* Espaço após o título */
+    
 }
 
 .btn-group {

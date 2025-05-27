@@ -73,7 +73,7 @@ const ClienteTable = ({ onEditar, onUpdated }) => {
         />
         <Button onClick={handleProcurar}>Procurar</Button>
       </div>
-
+      <div className="clientes-table-wrapper">
       <table className="clientes-table">
         <thead>
           <tr>
@@ -119,6 +119,7 @@ const ClienteTable = ({ onEditar, onUpdated }) => {
           ))}
         </tbody>
       </table>
+      </div>
     </>
   );
 };

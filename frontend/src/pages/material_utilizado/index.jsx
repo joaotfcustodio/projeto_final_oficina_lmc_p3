@@ -1,11 +1,11 @@
 import React, { useState } from "react";
 
-// Components
+
 import Card from "@/components/card";
 import MaterialUtilizadoForm from "@/components/material_utilizado_form/index";
 import ReparacaoTable from "@/components/material_utilizado_form/material_utilizado_table";
 
-// Styles
+
 import "./styles.css";
 
 const MateriaisUtilizadosPage = () => {

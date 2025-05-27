@@ -1,8 +1,7 @@
 import React from "react";
 import { NavLink, useNavigate } from "react-router-dom";
-import LogoutIcon from "@mui/icons-material/Logout"; // <- Ícone MUI
+import LogoutIcon from "@mui/icons-material/Logout"; 
 
-// Styles
 import "./styles.css";
 
 const Sidebar = () => {

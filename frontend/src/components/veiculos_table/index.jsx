@@ -3,11 +3,11 @@ import axios from "axios";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 
-// Components
+
 import Button from "@/components/ui/button";
 import Input from "@/components/ui/input";
 
-// Styles
+
 import "./styles.css";
 
 const VeiculoTable = ({ onEdit }) => {

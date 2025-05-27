@@ -1,4 +1,3 @@
-// Styles
 import "./styles.css";
 
 const Button = ({

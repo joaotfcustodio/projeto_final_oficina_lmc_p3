@@ -145,7 +145,7 @@ endpointsFunction.deleteCliente = async (req, res) => {
   }
 };
 
-// 🔍 Buscar cliente por NIF com veículos
+// Procurar cliente por NIF com veículos
 endpointsFunction.getClientePorNifComVeiculos = async (req, res) => {
   const { nif } = req.params;
   try {
