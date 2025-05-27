@@ -573,9 +573,9 @@ components:
     Veiculos:
       required:
         - matricula
-        - nome
         - marca
         - modelo
+        - ano
         - cor
         - nif
       type: object
@@ -584,10 +584,10 @@ components:
           type: string
           description: Chave primária da entidade veiculos
           example: 78-44-GT
-        nome:
-          type: string
-          description: Nome do veiculo
-          example: Golf
+        ano:
+          type: integer
+          description: Ano do veículo
+          example: "1996"
         marca:
           type: string
           description: Nome da marca do veiculo

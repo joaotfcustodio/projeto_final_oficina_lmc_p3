@@ -1,38 +1,44 @@
 const express = require("express");
 const router = express.Router();
 
-// Importação middleware
+// Middleware
 const middleware = require("../middleware.js");
 
-// Importação controller
+// Controller
 const clientesController = require("../controllers/clientes.controller.js");
 
-// Endpoints
+// Rotas protegidas com middleware de autenticação
 router.post(
   "/clientes",
   middleware.checkToken,
   clientesController.createCliente
 );
+
 router.get(
   "/clientes",
   middleware.checkToken,
   clientesController.getAllClientes
 );
+
 router.put(
   "/clientes/:nif",
   middleware.checkToken,
   clientesController.updateCliente
 );
+
 router.delete(
   "/clientes/:nif",
   middleware.checkToken,
   clientesController.deleteCliente
 );
+
 router.get(
-  "/clientes/nif/:nif",
+  "/clientes/:nif",
   middleware.checkToken,
-  clientesController.getClienteByNif
+  clientesController.getClientePorNifComVeiculos
 );
+
+// Pesquisa por nome
 router.get(
   "/clientes/nome/:nome",
   middleware.checkToken,

@@ -1,37 +1,73 @@
-// src/components/reparacoes_form/ReparacaoTable.jsx
+// src/components/reparacoes_form/ReparacaoForm.jsx
 import { useState } from "react";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import SearchIcon from "@mui/icons-material/Search";
 
-// Components
 import Button from "@/components/ui/button";
 import Input from "@/components/ui/input";
-
-// Styles
+import axios from "axios";
 import "./ReparacoesForm.css";
 
-const ReparacaoTable = () => {
-  const [filtro, setFiltro] = useState("");
+const ReparacaoForm = ({
+  reparacoesExternas = [],
+  onEditar = () => {},
+  matriculaFiltro,
+  setMatriculaFiltro
+}) => {
+  const [mensagem, setMensagem] = useState(null);
+  const [reparacoes, setReparacoes] = useState(reparacoesExternas);
 
-  const reparacoes = [
-    {
-      id: "#256",
-      matricula: "78-44-GT",
-      preco: "900 €",
-    },
-    {
-      id: "#257",
-      matricula: "11-AA-22",
-      preco: "750 €",
-    },
-  ];
+  const [matriculaInterna, setMatriculaInterna] = useState("");
+  const matricula = matriculaFiltro ?? matriculaInterna;
+  const setMatricula = setMatriculaFiltro ?? setMatriculaInterna;
 
-  const reparacoesFiltradas = filtro
-    ? reparacoes.filter((r) =>
-        r.matricula.toLowerCase().includes(filtro.toLowerCase())
+  const buscarReparacoes = async (matricula) => {
+    try {
+      const headers = {
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
+      };
+      const res = await axios.get(
+        `http://localhost:5000/api/v1/reparacoes/${matricula}`,
+        { headers }
+      );
+      setReparacoes(res.data.reparacoes || []);
+      setMensagem(null);
+    } catch (err) {
+      if (err.response?.status === 404) {
+        setMensagem("Matrícula não se encontra na base de dados.");
+        setReparacoes([]);
+      } else {
+        setMensagem("Erro ao carregar reparações.");
+      }
+    }
+  };
+
+  const eliminarReparacao = async (id) => {
+    try {
+      const headers = {
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
+      };
+      await axios.delete(`http://localhost:5000/api/v1/reparacoes/${id}`, {
+        headers,
+      });
+      setReparacoes((prev) => prev.filter((r) => r.id_reparacao !== id));
+    } catch (err) {
+      alert("Erro ao eliminar reparação.");
+    }
+  };
+
+  const formatarCampo = (campo) => {
+    return campo
+      .replace(/_/g, " ")
+      .replace(/\b\w/g, (l) => l.toUpperCase());
+  };
+
+  const reparacoesFiltradas = Array.isArray(reparacoes)
+    ? reparacoes.filter(
+        (r) => r.matricula.toLowerCase() === matricula.toLowerCase()
       )
-    : reparacoes;
+    : [];
 
   return (
     <>
@@ -40,53 +76,53 @@ const ReparacaoTable = () => {
           <Input
             type="text"
             placeholder="Filtrar por matrícula"
-            value={filtro}
-            onChange={(e) => setFiltro(e.target.value)}
+            value={matricula}
+            onChange={(e) => setMatricula(e.target.value)}
           />
-          <Button title="Procurar" variant="icon">
+          <Button title="Procurar" variant="icon" onClick={() => buscarReparacoes(matricula)}>
             <SearchIcon style={{ height: "20px", width: "20px" }} />
           </Button>
         </div>
+        {mensagem && (
+          <div className="mensagem-erro" style={{ marginTop: "0.5rem" }}>
+            {mensagem}
+          </div>
+        )}
       </div>
-
-      <table className="reparacao-table">
-        <thead>
-          <tr>
-            <th>ID Reparação</th>
-            <th>Matrícula</th>
-            <th>Preço</th>
-            <th>Lista de Reparações</th>
-            <th>Ações</th>
-          </tr>
-        </thead>
-        <tbody>
-          {reparacoesFiltradas.map((r) => (
-            <tr key={r.id}>
-              <td>{r.id}</td>
-              <td>{r.matricula}</td>
-              <td>{r.preco}</td>
-              <td style={{ verticalAlign: "top" }}>
-                <div
-                  style={{
-                    display: "flex",
-                    alignItems: "center",
-                    gap: "12px",
-                  }}
-                >
-                  <div style={{ fontSize: "0.85rem", flex: 1 }}>
-                    <span>✔ Pintura geral</span>
-                    <br />
-                    <span>✔ Polimento parcial</span>
-                  </div>
-                  
-                </div>
-              </td>
-              <td>
-              <div className="reparacao-actions">
+      <div className="reparacao-table-container">
+        <table className="reparacao-table">
+          <thead>
+            <tr>
+              <th>ID Reparação</th>
+              <th>Matrícula</th>
+              <th>Preço</th>
+              <th>Lista de Reparações</th>
+              <th>Ações</th>
+            </tr>
+          </thead>
+          <tbody>
+            {reparacoesFiltradas.map((r) => (
+              <tr key={r.id_reparacao}>
+                <td>#{r.id_reparacao}</td>
+                <td>{r.matricula}</td>
+                <td>{r.preco} €</td>
+                <td style={{ verticalAlign: "top" }}>
+                  {Object.entries(r)
+                    .filter(
+                      ([campo, valor]) =>
+                        typeof valor === "boolean" && valor === true
+                    )
+                    .map(([campo]) => (
+                      <div key={campo}>✔ {formatarCampo(campo)}</div>
+                    ))}
+                </td>
+                <td>
+                  <div className="reparacao-actions">
                     <Button
                       className="reparacao-button"
                       title="Editar"
                       variant="icon"
+                      onClick={() => onEditar(r)}
                     >
                       <EditIcon style={{ height: "20px", width: "20px" }} />
                     </Button>
@@ -95,6 +131,7 @@ const ReparacaoTable = () => {
                       title="Eliminar"
                       variant="icon"
                       theme="secondary"
+                      onClick={() => eliminarReparacao(r.id_reparacao)}
                     >
                       <DeleteIcon
                         style={{ height: "20px", width: "20px" }}
@@ -102,39 +139,14 @@ const ReparacaoTable = () => {
                       />
                     </Button>
                   </div>
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
-
-      <div className="checkbox-grid">
-        <label><input type="checkbox" /> Pintura geral</label>
-        <label><input type="checkbox" /> Pintura de pára-choques dianteiro</label>
-        <label><input type="checkbox" /> Pintura de pára-choques traseito</label>
-        <label><input type="checkbox" /> Pintura de capô</label>
-        <label><input type="checkbox" /> Pintura de tejadilho</label>
-        <label><input type="checkbox" /> Pintura de guarda-lamas esquerdo da frente</label>
-        <label><input type="checkbox" /> Pintura de guarda-lamas direito da frente</label>
-        <label><input type="checkbox" /> Pintura de guarda-lamas esquerdo de trás</label>
-        <label><input type="checkbox" /> Pintura de guarda-lamas direito de trás</label>
-        <label><input type="checkbox" /> Pintura de jantes</label>
-        <label><input type="checkbox" /> Pintura de embaladeiras</label>
-        <label><input type="checkbox" /> Pintura de capas de espelho</label>
-        <label><input type="checkbox" /> Pintura de porta-bagagens</label>
-        <label><input type="checkbox" /> Polimento geral</label>
-        <label><input type="checkbox" /> Polimento parcial</label>
-        <label><input type="checkbox" /> Polimento geral profundo</label>
-        <label><input type="checkbox" /> Restauro de peças plásticas</label>
-        <label><input type="checkbox" /> Restauro de peças metálicas</label>
-        <label><input type="checkbox" /> Bate-chapa</label>
-        <label><input type="checkbox" /> Pintura porta esquerda da frente</label>
-        <label><input type="checkbox" /> Pintura porta esquerda de trás</label>
-        <label><input type="checkbox" /> Pintura porta direita da frente</label>
-        <label><input type="checkbox" /> Pintura porta direita de trás</label>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
       </div>
     </>
   );
 };
 
-export default ReparacaoTable;
+export default ReparacaoForm;

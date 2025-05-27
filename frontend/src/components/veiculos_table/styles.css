@@ -1,29 +1,55 @@
 .veiculos-header {
+    margin-bottom: 1.5rem;
+}
+
+.veiculos-controls-row {
     display: flex;
-    justify-content: space-between;
+    gap: 0.75rem;
     align-items: center;
-    margin-bottom: 16px;
+}
+
+.veiculos-scroll-container {
+    max-height: 20rem;
+    overflow-y: auto;
+    overflow-x: auto;
+    border: 0.0625rem solid #ddd;
+    border-radius: 0.5rem;
 }
 
 .veiculos-table {
     width: 100%;
     border-collapse: collapse;
-    font-size: 14px;
+    min-width: 50rem;
+    font-size: 0.9rem;
 }
 
 .veiculos-table th,
 .veiculos-table td {
-    border: 1px solid #eee;
-    padding: 8px;
+    padding: 0.75rem 1rem;
     text-align: left;
+    border-bottom: 0.0625rem solid #e0e0e0;
 }
 
-.veiculos-table th {
-    background-color: #f3f4f6;
-    font-weight: 600;
-}
-.veiculos-controls {
+.veiculo-actions {
     display: flex;
-    gap: 10px;
+    gap: 0.5rem;
+    justify-content: center;
     align-items: center;
+}
+
+.veiculo-button {
+    padding: 0.25rem 0.5rem;
+    font-size: 0.75rem;
+    height: 2rem;
+    width: 2rem;
+    min-width: unset;
+    border-radius: 0.375rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Tamanho do ícone */
+.veiculo-button svg {
+    font-size: 1rem;
 }

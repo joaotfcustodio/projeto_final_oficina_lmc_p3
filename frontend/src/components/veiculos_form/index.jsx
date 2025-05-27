@@ -1,53 +1,101 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import axios from "axios";
-
-// Components
 import Button from "@/components/ui/button";
 import Input from "@/components/ui/input";
-
-// Styles
 import "./styles.css";
 
-const VeiculoForm = ({ onCreated }) => {
+const VeiculoForm = ({ onCreated, veiculoEditavel, onCancelEdit }) => {
   const [form, setForm] = useState({
     nif: "",
     marca: "",
     modelo: "",
     matricula: "",
+    cor: "",
     ano: "",
   });
 
-  const handleChange = (e) =>
+  const [modoEdicao, setModoEdicao] = useState(false);
+  const [mensagem, setMensagem] = useState(null);
+  const [tipoMensagem, setTipoMensagem] = useState(null);
+
+  useEffect(() => {
+    if (veiculoEditavel) {
+      setForm({
+        nif: veiculoEditavel.clientes?.[0]?.nif || "",
+        marca: veiculoEditavel.marca,
+        modelo: veiculoEditavel.modelo,
+        matricula: veiculoEditavel.matricula,
+        cor: veiculoEditavel.cor,
+        ano: veiculoEditavel.ano,
+      });
+      setModoEdicao(true);
+    } else {
+      limparFormulario();
+    }
+  }, [veiculoEditavel]);
+
+  const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
+  };
+
+  const limparFormulario = () => {
+    setForm({
+      nif: "",
+      marca: "",
+      modelo: "",
+      matricula: "",
+      cor: "",
+      ano: "",
+    });
+    setMensagem(null);
+    setTipoMensagem(null);
+    setModoEdicao(false);
+    onCancelEdit?.();
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setMensagem(null);
+    setTipoMensagem(null);
+
+    const headers = {
+      Authorization: `Bearer ${localStorage.getItem("token")}`,
+    };
+
     try {
-      await axios.post("http://localhost:5000/api/v1/veiculos", form, {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
-        },
-      });
+      if (modoEdicao) {
+        await axios.put(`http://localhost:5000/api/v1/veiculos/${form.matricula}`, form, {
+          headers,
+        });
+        setMensagem("Veículo atualizado com sucesso!");
+      } else {
+        await axios.post("http://localhost:5000/api/v1/veiculos", form, {
+          headers,
+        });
+        setMensagem("Veículo adicionado com sucesso!");
+      }
+
+      setTipoMensagem("success");
+      limparFormulario();
       onCreated?.();
-      setForm({
-        nif: "",
-        marca: "",
-        modelo: "",
-        matricula: "",
-        ano: "",
-      });
-    } catch {
-      alert("Erro ao adicionar veículo.");
+    } catch (error) {
+      let erroMsg = "Erro ao processar veículo.";
+      if (error.response?.data?.message) {
+        erroMsg = error.response.data.message;
+      }
+      setMensagem(erroMsg);
+      setTipoMensagem("error");
     }
   };
 
   return (
-    <form className="veiculos-form" onSubmit={handleSubmit}>
+    <form className="veiculos-form" onSubmit={handleSubmit} style={{ marginTop: "1rem" }}>
       <Input
         name="nif"
         value={form.nif}
         onChange={handleChange}
         placeholder="NIF do Cliente"
+        disabled={modoEdicao}
       />
       <Input
         name="marca"
@@ -66,6 +114,13 @@ const VeiculoForm = ({ onCreated }) => {
         value={form.matricula}
         onChange={handleChange}
         placeholder="Matrícula"
+        disabled={modoEdicao}
+      />
+      <Input
+        name="cor"
+        value={form.cor}
+        onChange={handleChange}
+        placeholder="Cor"
       />
       <Input
         type="number"
@@ -74,16 +129,27 @@ const VeiculoForm = ({ onCreated }) => {
         onChange={handleChange}
         placeholder="Ano"
       />
-      <div className="btn-group">
-        <Button
-          type="submit"
+
+      {mensagem && (
+        <div
+          style={{
+            backgroundColor: tipoMensagem === "success" ? "#d4edda" : "#f8d7da",
+            color: tipoMensagem === "success" ? "#155724" : "#721c24",
+            padding: "0.75rem",
+            borderRadius: "0.5rem",
+            marginTop: "1rem",
+          }}
         >
-          Adicionar
+          {mensagem}
+        </div>
+      )}
+
+      <div className="btn-group" style={{ marginTop: "1rem" }}>
+        <Button  className="btn-adicionar" type="submit" theme={modoEdicao ? "primary" : "default"}>
+          {modoEdicao ? "Atualizar" : "Adicionar"}
         </Button>
-        <Button
-          theme="secondary"
-        >
-          Cancelar
+        <Button type="button" theme="secondary" onClick={limparFormulario}>
+          {modoEdicao ? "Cancelar" : "Limpar"}
         </Button>
       </div>
     </form>

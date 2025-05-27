@@ -1,7 +1,7 @@
 const Reparacao = require("../models/reparacoes.model");
 const Veiculo = require("../models/veiculos.model");
 const MaterialUtilizado = require("../models/material_utilizado.model");
-
+const { Op } = require("sequelize");
 const endpointsFunction = {};
 
 // Criar nova reparação
@@ -89,13 +89,20 @@ endpointsFunction.createReparacao = async (req, res) => {
 // Obter todas as reparações por matrícula
 endpointsFunction.getReparacoesByMatricula = async (req, res) => {
   try {
-    const { matricula } = req.params;
+    const matricula = req.params.matricula;
 
-    const veiculo = await Veiculo.findByPk(matricula, {
+    const veiculo = await Veiculo.findOne({
+      where: { matricula },
       include: [
         {
           model: Reparacao,
-          include: [MaterialUtilizado],
+          as: "reparacoes", // <-- usa o alias da associação
+          include: [
+            {
+              model: MaterialUtilizado,
+              as: "material_utilizado", // <-- usa o alias da associação
+            },
+          ],
         },
       ],
     });
@@ -109,9 +116,10 @@ endpointsFunction.getReparacoesByMatricula = async (req, res) => {
 
     res.status(200).json({
       status: "success",
-      reparacoes: veiculo.Reparacaos,
+      reparacoes: veiculo.reparacoes,
     });
   } catch (err) {
+    console.error("Erro interno no servidor:", err);
     res.status(500).json({
       status: "error",
       message: "Erro ao obter reparações do veículo.",

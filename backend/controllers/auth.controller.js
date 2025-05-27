@@ -1,48 +1,174 @@
+const sequelize = require("../config/database");
+const User = require("../models/user.model");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
-const Utilizador = require("../models/utilizador.model");
 const config = require("../config/config");
 
-const login = async (req, res) => {
-  const { email, password } = req.body;
+const endpointsFunction = {};
+
+// REGISTO
+endpointsFunction.register = async (req, res) => {
+  const { nome, email, password } = req.body;
+
+  // Validações iniciais
+  if (!nome || !email || !password) {
+    return res.status(400).json({
+      success: false,
+      message: "Nome, email e password são obrigatórios.",
+    });
+  }
+
+  const emailRegex = /^\S+@\S+\.\S+$/;
+  if (!emailRegex.test(email)) {
+    return res.status(400).json({
+      success: false,
+      message: "Formato de email inválido.",
+    });
+  }
+
+  if (password.length < 6) {
+    return res.status(400).json({
+      success: false,
+      message: "A password deve ter pelo menos 6 caracteres.",
+    });
+  }
 
   try {
-    const utilizador = await Utilizador.findOne({ where: { email } });
+    // Verificar se já existe um utilizador com este email
+    const existente = await User.findOne({ where: { email } });
 
-    if (!utilizador) {
-      return res.status(401).json({ message: "Email inválido." });
+    if (existente) {
+      return res.status(409).json({
+        success: false,
+        message: "Este email já está registado.",
+      });
     }
 
-    const passwordValida = await bcrypt.compare(password, utilizador.password);
-
-    if (!passwordValida) {
-      return res.status(401).json({ message: "Password inválida." });
-    }
-
-    // Gerar token JWT com validade de 30 minutos diretamente
-    const token = jwt.sign({ id: utilizador.id, email }, config.secret, {
-      expiresIn: "30m",
+    // Criar novo utilizador
+    const novoUser = await User.create({
+      nome,
+      email,
+      password,
     });
 
-    res.status(200).json({ token });
-  } catch (err) {
-    res.status(500).json({ message: "Erro interno.", error: err.message });
+    res.status(201).json({
+      success: true,
+      message: "Utilizador registado com sucesso.",
+      data: {
+        id: novoUser.id,
+        nome: novoUser.nome,
+        email: novoUser.email,
+      },
+    });
+  } catch (error) {
+    console.error("Erro no registo:", error);
+    res.status(500).json({
+      success: false,
+      message: "Erro interno ao criar utilizador.",
+    });
   }
 };
 
-const register = async (req, res) => {
+// LOGIN
+endpointsFunction.login = async (req, res) => {
   const { email, password } = req.body;
 
-  try {
-    const hash = await bcrypt.hash(password, 10);
-    await Utilizador.create({ email, password: hash });
+  if (!email || !password) {
+    return res.status(400).json({
+      success: false,
+      message: "Email e password são obrigatórios.",
+    });
+  }
 
-    res.status(201).json({ message: "Utilizador registado com sucesso." });
-  } catch (err) {
-    res
-      .status(500)
-      .json({ message: "Erro ao registar utilizador.", error: err.message });
+  try {
+    console.log("EMAIL recebido:", email);
+    const user = await User.findOne({ where: { email } });
+    console.log("UTILIZADOR encontrado:", user);
+
+    if (!user) {
+      return res.status(401).json({
+        success: false,
+        message: "Email ou password incorretos.",
+      });
+    }
+
+    console.log("Password recebida:", password);
+    console.log("Hash armazenado:", user.password);
+
+    const isMatch = await bcrypt.compare(password, user.password);
+    console.log("Resultado do bcrypt.compare:", isMatch);
+
+    if (!isMatch) {
+      return res.status(401).json({
+        success: false,
+        message: "Email ou password incorretos.",
+      });
+    }
+    const token = jwt.sign({ id: user.id, email: user.email }, config.secret, {
+      expiresIn: config.timer,
+    });
+
+    res.status(200).json({
+      success: true,
+      message: "Login efetuado com sucesso.",
+      AccessToken: token,
+    });
+  } catch (error) {
+    console.error("Erro no login:", error);
+    res.status(500).json({
+      success: false,
+      message: "Erro ao tentar autenticar.",
+    });
   }
 };
 
-module.exports = { login, register };
+// REFRESH TOKEN
+endpointsFunction.refreshToken = async (req, res) => {
+  const { token } = req.body;
+
+  if (!token) {
+    return res.status(401).json({
+      success: false,
+      message: "Token não fornecido.",
+    });
+  }
+
+  try {
+    const decoded = jwt.verify(token, config.secret);
+
+    const newToken = jwt.sign(
+      { id: decoded.id, email: decoded.email },
+      config.secret,
+      { expiresIn: config.timer }
+    );
+
+    res.status(200).json({
+      success: true,
+      message: "Token renovado com sucesso.",
+      AccessToken: newToken,
+    });
+  } catch (err) {
+    return res.status(403).json({
+      success: false,
+      message: "Token inválido ou expirado.",
+    });
+  }
+};
+
+// LOGOUT
+endpointsFunction.logout = (req, res) => {
+  try {
+    res.status(200).json({
+      success: true,
+      message: "Logout realizado com sucesso.",
+    });
+  } catch (error) {
+    console.error("Erro no logout:", error);
+    res.status(500).json({
+      success: false,
+      message: "Erro ao terminar sessão.",
+    });
+  }
+};
+
+module.exports = endpointsFunction;

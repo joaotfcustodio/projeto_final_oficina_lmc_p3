@@ -1,11 +1,25 @@
 .veiculos-form {
     display: flex;
     flex-direction: column;
-    gap: 12px;
+    gap: 0.75rem;
+    /* Espaço entre inputs */
     width: 100%;
+    margin-top: 1rem;
+    /* Espaço após o título */
 }
 
 .btn-group {
     display: flex;
     justify-content: space-between;
+    gap: 0.75rem;
+}
+
+.btn-group button[type="submit"]:not([disabled]) {
+    background-color: #28a745 !important;
+    color: #fff;
+    transition: background-color 0.2s ease-in-out;
+}
+
+.btn-group button[type="submit"]:not([disabled]):hover {
+    background-color: #218838 !important;
 }

@@ -2,22 +2,22 @@ const Cliente = require("./clientes.model");
 const Veiculo = require("./veiculos.model");
 const Reparacao = require("./reparacoes.model");
 const MaterialUtilizado = require("./material_utilizado.model");
+const ClientesVeiculos = require("./clientes_veiculos.model");
 
 // Cliente <-> Veiculo (N:M)
 Cliente.belongsToMany(Veiculo, {
-  through: "ClienteVeiculo",
-  foreignKey: "nif",
-  otherKey: "matricula",
+  through: ClientesVeiculos,
+  foreignKey: "clienteNif",
+  otherKey: "veiculoMatricula",
   as: "veiculos",
 });
 
 Veiculo.belongsToMany(Cliente, {
-  through: "ClienteVeiculo",
-  foreignKey: "matricula",
-  otherKey: "nif",
+  through: ClientesVeiculos,
+  foreignKey: "veiculoMatricula",
+  otherKey: "clienteNif",
   as: "clientes",
 });
-
 // Veiculo -> Reparacao (1:N)
 Veiculo.hasMany(Reparacao, {
   foreignKey: "matricula",

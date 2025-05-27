@@ -13,6 +13,11 @@ router.post(
   middleware.checkToken,
   veiculosController.createVeiculo
 );
+router.get(
+  "/veiculos",
+  middleware.checkToken,
+  veiculosController.getAllVeiculos
+);
 
 router.get(
   "/veiculos/:matricula",

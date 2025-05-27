@@ -18,7 +18,7 @@ router.post(
 
 // Obter todas as reparações de um veículo
 router.get(
-  "/reparacoes/veiculo/:matricula",
+  "/reparacoes/:matricula",
   middleware.checkToken,
   reparacoesController.getReparacoesByMatricula
 );

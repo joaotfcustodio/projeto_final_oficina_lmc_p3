@@ -1,16 +1,13 @@
 const jwt = require("jsonwebtoken");
 const config = require("./config/config.js");
 
-//cada pedido a um endpoint valida token de autenticação
 const checkToken = (req, res, next) => {
-  const token = req.headers["x-access-token"] || req.headers["authorization"];
+  let token = req.headers["x-access-token"] || req.headers["authorization"];
 
-  //parser do token
   if (token != undefined && token.startsWith("Bearer ")) {
     token = token.slice(7, token.length);
   }
 
-  //token existe?
   if (token) {
     jwt.verify(token, config.secret, (error, decoded) => {
       if (error) {

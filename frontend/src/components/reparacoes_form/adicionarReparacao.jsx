@@ -1,42 +1,55 @@
-import { useState } from "react";
+// src/components/reparacoes_form/AdicionarReparacao.jsx
+import { useEffect, useState } from "react";
+import axios from "axios";
 
-// Components
 import Button from "@/components/ui/button";
 import Input from "@/components/ui/input";
-
-// Styles
 import "./ReparacoesForm.css";
 
-const servicosDisponiveis = [
-  "Pintura geral",
-  "Pintura de pára-choques dianteiro",
-  "Pintura de pára-choques traseito",
-  "Pintura de capô",
-  "Pintura de tejadilho",
-  "Pintura de guarda-lamas esquerdo da frente",
-  "Pintura de guarda-lamas direito da frente",
-  "Pintura de guarda-lamas esquerdo de trás",
-  "Pintura de guarda-lamas direito de trás",
-  "Pintura de jantes",
-  "Pintura de embaladeiras",
-  "Pintura de capas de espelho",
-  "Pintura de porta-bagagens",
-  "Polimento geral",
-  "Polimento parcial",
-  "Polimento geral profundo",
-  "Restauro de peças plásticas",
-  "Restauro de peças metálicas",
-  "Bate-chapa",
-  "Pintura porta esquerda da frente",
-  "Pintura porta esquerda de trás",
-  "Pintura porta direita da frente",
-  "Pintura porta direita de trás",
-];
+const servicosMap = {
+  "Pintura geral": "pintura_geral",
+  "Pintura de pára-choques dianteiro": "pintura_de_para_choques_dianteiro",
+  "Pintura de pára-choques traseito": "pintura_de_para_choques_traseiro",
+  "Pintura de capô": "pintura_de_capot",
+  "Pintura de tejadilho": "pintura_de_tejadilho",
+  "Pintura de guarda-lamas esquerdo da frente": "pintura_de_guarda_lamas_esquerdo_da_frente",
+  "Pintura de guarda-lamas direito da frente": "pintura_de_guarda_lamas_direito_da_frente",
+  "Pintura de guarda-lamas esquerdo de trás": "pintura_de_guarda_lamas_esquerdo_de_tras",
+  "Pintura de guarda-lamas direito de trás": "pintura_de_guarda_lamas_direito_de_tras",
+  "Pintura de jantes": "pintura_de_jantes",
+  "Pintura de embaladeiras": "pintura_de_embaladeiras",
+  "Pintura de capas de espelho": "pintura_de_capas_de_espelho",
+  "Pintura de porta-bagagens": "pintura_de_porta_bagagens",
+  "Polimento geral": "polimento_geral",
+  "Polimento parcial": "polimento_parcial",
+  "Polimento geral profundo": "polimento_geral_profundo",
+  "Restauro de peças plásticas": "restauro_de_pecas_plasticas",
+  "Restauro de peças metálicas": "restauro_de_pecas_metalicas",
+  "Bate-chapa": "bate_chapa",
+  "Pintura porta esquerda da frente": "pintura_de_porta_esquerda_da_frente",
+  "Pintura porta esquerda de trás": "pintura_de_porta_esquerda_de_tras",
+  "Pintura porta direita da frente": "pintura_de_porta_direita_da_frente",
+  "Pintura porta direita de trás": "pintura_de_porta_direita_de_tras",
+};
 
-const AdicionarReparacao = ({ onAdicionar }) => {
+const servicosDisponiveis = Object.keys(servicosMap);
+
+const AdicionarReparacao = ({ onAdicionar, reparacaoSelecionada }) => {
   const [matricula, setMatricula] = useState("");
   const [preco, setPreco] = useState("");
   const [servicosSelecionados, setServicosSelecionados] = useState([]);
+  const [mensagem, setMensagem] = useState(null);
+
+  useEffect(() => {
+    if (reparacaoSelecionada) {
+      setMatricula(reparacaoSelecionada.matricula);
+      setPreco(reparacaoSelecionada.preco);
+      const ativos = Object.entries(servicosMap)
+        .filter(([label, campo]) => reparacaoSelecionada[campo])
+        .map(([label]) => label);
+      setServicosSelecionados(ativos);
+    }
+  }, [reparacaoSelecionada]);
 
   const handleCheckboxChange = (servico) => {
     setServicosSelecionados((prev) =>
@@ -46,18 +59,57 @@ const AdicionarReparacao = ({ onAdicionar }) => {
     );
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
+    setMensagem(null);
+
     const novaReparacao = {
-      id: `#${Math.floor(Math.random() * 1000)}`,
-      matricula,
-      preco: preco + " €",
-      servicos: servicosSelecionados,
+      matricula: matricula.trim(),
+      preco: parseFloat(preco),
     };
-    onAdicionar(novaReparacao);
-    setMatricula("");
-    setPreco("");
-    setServicosSelecionados([]);
+
+    Object.values(servicosMap).forEach((campo) => {
+      novaReparacao[campo] = false;
+    });
+    servicosSelecionados.forEach((servico) => {
+      const campo = servicosMap[servico];
+      if (campo) novaReparacao[campo] = true;
+    });
+
+    const headers = {
+      Authorization: `Bearer ${localStorage.getItem("token")}`,
+    };
+
+    try {
+      if (reparacaoSelecionada) {
+        await axios.put(
+          `http://localhost:5000/api/v1/reparacoes/${reparacaoSelecionada.id_reparacao}`,
+          novaReparacao,
+          { headers }
+        );
+        onAdicionar({ ...novaReparacao, id_reparacao: reparacaoSelecionada.id_reparacao });
+        setMensagem("Reparação atualizada com sucesso!");
+      } else {
+        const res = await axios.post(
+          "http://localhost:5000/api/v1/reparacoes",
+          novaReparacao,
+          { headers }
+        );
+        onAdicionar({ ...novaReparacao, id_reparacao: res.data.id_reparacao });
+        setMensagem("Reparação adicionada com sucesso!");
+      }
+
+      setMatricula("");
+      setPreco("");
+      setServicosSelecionados([]);
+    } catch (err) {
+      console.error("Erro ao submeter reparação:", err);
+      if (err.response?.status === 404) {
+        setMensagem("Matrícula não se encontra na base de dados.");
+      } else {
+        setMensagem("Erro ao submeter reparação.");
+      }
+    }
   };
 
   return (
@@ -69,6 +121,7 @@ const AdicionarReparacao = ({ onAdicionar }) => {
           value={matricula}
           onChange={(e) => setMatricula(e.target.value)}
           required
+          disabled={!!reparacaoSelecionada}
         />
         <Input
           type="number"
@@ -78,6 +131,7 @@ const AdicionarReparacao = ({ onAdicionar }) => {
           required
         />
       </div>
+
       <div className="checkbox-grid">
         {servicosDisponiveis.map((servico) => (
           <label key={servico}>
@@ -90,7 +144,24 @@ const AdicionarReparacao = ({ onAdicionar }) => {
           </label>
         ))}
       </div>
-      <Button type="submit">Adicionar Reparação</Button>
+
+      {mensagem && (
+        <div
+          style={{
+            margin: "1rem 0",
+            backgroundColor: mensagem.includes("sucesso") ? "#d4edda" : "#f8d7da",
+            color: mensagem.includes("sucesso") ? "#155724" : "#721c24",
+            padding: "0.75rem",
+            borderRadius: "0.5rem",
+          }}
+        >
+          {mensagem}
+        </div>
+      )}
+
+      <Button type="submit">
+        {reparacaoSelecionada ? "Editar Reparação" : "Adicionar Reparação"}
+      </Button>
     </form>
   );
 };

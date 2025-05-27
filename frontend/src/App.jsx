@@ -9,7 +9,7 @@ import VeiculosPage from "./pages/veiculos/index";
 
 // Components
 import Layout from "./components/layout";
-import LoginUi from "./components/login";
+import LoginUi from "./components/login/LoginUi";
 
 // Styles
 import "./App.css";

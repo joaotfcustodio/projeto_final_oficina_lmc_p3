@@ -1,7 +1,7 @@
 const { DataTypes } = require("sequelize");
 const sequelize = require("../config/database");
 
-const Clientes = sequelize.define(
+const Cliente = sequelize.define(
   "Cliente",
   {
     nif: {
@@ -22,7 +22,7 @@ const Clientes = sequelize.define(
       allowNull: false,
     },
     data_registo: {
-      type: DataTypes.DATEONLY,
+      type: DataTypes.DATE,
       allowNull: false,
     },
   },
@@ -32,4 +32,4 @@ const Clientes = sequelize.define(
   }
 );
 
-module.exports = Clientes;
+module.exports = Cliente;

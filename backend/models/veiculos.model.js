@@ -8,6 +8,9 @@ const Veiculo = sequelize.define(
       type: DataTypes.STRING,
       primaryKey: true,
       allowNull: false,
+      set(value) {
+        this.setDataValue("matricula", value.toUpperCase());
+      },
     },
     marca: {
       type: DataTypes.STRING,
@@ -20,6 +23,15 @@ const Veiculo = sequelize.define(
     cor: {
       type: DataTypes.STRING,
       allowNull: false,
+    },
+    ano: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      validate: {
+        isInt: true,
+        min: 1900,
+        max: new Date().getFullYear() + 1,
+      },
     },
   },
   {

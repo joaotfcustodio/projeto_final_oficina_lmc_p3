@@ -1,3 +1,5 @@
+version: "3.8"
+
 services:
   mysql:
     image: mysql:latest
@@ -22,3 +24,24 @@ services:
       - "8081:80"
     depends_on:
       - mysql
+
+  app:
+    build: .
+    container_name: node-app
+    depends_on:
+      - mysql
+    environment:
+      DB_NAME: projeto_final_p3
+      DB_USER: root
+      DB_PASS: 123
+      DB_HOST: mysql
+    volumes:
+      - .:/app
+    working_dir: /app
+    ports:
+      - "5000:5000"
+    command: >
+      sh -c "
+        npx sequelize-cli db:migrate &&
+        npm start
+      "

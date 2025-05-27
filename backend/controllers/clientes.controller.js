@@ -7,24 +7,75 @@ const endpointsFunction = {};
 
 // Criar cliente
 endpointsFunction.createCliente = async (req, res) => {
-  const { nome, morada, nif, contacto, data_registo } = req.body;
+  let { nome, morada, nif, contacto, data_registo } = req.body;
+
+  if (!nome || !morada || !nif || !contacto || !data_registo) {
+    return res.status(400).json({
+      status: "error",
+      message: "Todos os campos são obrigatórios.",
+    });
+  }
+
+  const nomeRegex = /^[A-Za-zÀ-ÿ\s]+$/;
+  if (!nomeRegex.test(nome)) {
+    return res.status(400).json({
+      status: "error",
+      message: "O nome deve conter apenas letras.",
+    });
+  }
+
+  const nifRegex = /^[1235689]\d{8}$/;
+  if (!nifRegex.test(nif)) {
+    return res.status(400).json({
+      status: "error",
+      message:
+        "NIF inválido. Deve conter 9 dígitos e começar por 1, 2, 3, 5, 6, 8 ou 9.",
+    });
+  }
+
+  const contactoRegex = /^\d{9}$/;
+  if (!contactoRegex.test(contacto)) {
+    return res.status(400).json({
+      status: "error",
+      message: "Contacto inválido. Deve conter exatamente 9 dígitos.",
+    });
+  }
+
+  const data = new Date(data_registo);
+  if (isNaN(data.getTime())) {
+    return res.status(400).json({
+      status: "error",
+      message: "Data de registo inválida.",
+    });
+  }
+
+  const existente = await Clientes.findOne({ where: { nif } });
+  if (existente) {
+    return res.status(409).json({
+      status: "error",
+      message: "Já existe um cliente com esse NIF.",
+    });
+  }
+
   try {
     const cliente = await Clientes.create({
       nome,
       morada,
       nif,
       contacto,
-      data_registo,
+      data_registo: data,
     });
-    res.status(201).json({
+
+    return res.status(201).json({
       status: "success",
       message: "Cliente criado com sucesso.",
       data: cliente,
     });
   } catch (error) {
-    res.status(500).json({
+    console.error("Erro ao criar cliente:", error);
+    return res.status(500).json({
       status: "error",
-      message: "Erro ao criar cliente.",
+      message: "Erro interno ao criar cliente.",
       details: error.message,
     });
   }
@@ -56,13 +107,15 @@ endpointsFunction.updateCliente = async (req, res) => {
       { where: { nif } }
     );
     if (atualizado[0] === 0) {
-      return res
-        .status(404)
-        .json({ status: "error", message: "Cliente não encontrado." });
+      return res.status(404).json({
+        status: "error",
+        message: "Cliente não encontrado.",
+      });
     }
-    res
-      .status(200)
-      .json({ status: "success", message: "Cliente atualizado com sucesso." });
+    res.status(200).json({
+      status: "success",
+      message: "Cliente atualizado com sucesso.",
+    });
   } catch (error) {
     res.status(500).json({
       status: "error",
@@ -78,33 +131,52 @@ endpointsFunction.deleteCliente = async (req, res) => {
   try {
     const eliminado = await Clientes.destroy({ where: { nif } });
     if (!eliminado) {
-      return res
-        .status(404)
-        .json({ status: "error", message: "Cliente não encontrado." });
+      return res.status(404).json({
+        status: "error",
+        message: "Cliente não encontrado.",
+      });
     }
     res.status(204).send();
   } catch (error) {
-    res
-      .status(500)
-      .json({ status: "error", message: "Erro ao eliminar cliente." });
+    res.status(500).json({
+      status: "error",
+      message: "Erro ao eliminar cliente.",
+    });
   }
 };
 
-// Procurar cliente por NIF
-endpointsFunction.getClienteByNif = async (req, res) => {
+// 🔍 Buscar cliente por NIF com veículos
+endpointsFunction.getClientePorNifComVeiculos = async (req, res) => {
   const { nif } = req.params;
   try {
-    const cliente = await Clientes.findOne({ where: { nif } });
+    const cliente = await Clientes.findOne({
+      where: { nif },
+      include: [
+        {
+          model: Veiculos,
+          as: "veiculos",
+          through: { attributes: [] },
+        },
+      ],
+    });
+
     if (!cliente) {
-      return res
-        .status(404)
-        .json({ status: "error", message: "Cliente não encontrado." });
+      return res.status(404).json({
+        status: "error",
+        message: "Cliente não encontrado.",
+      });
     }
-    res.status(200).json({ status: "success", data: cliente });
+
+    res.status(200).json({
+      status: "success",
+      data: cliente,
+    });
   } catch (error) {
-    res
-      .status(500)
-      .json({ status: "error", message: "Erro ao procurar cliente." });
+    res.status(500).json({
+      status: "error",
+      message: "Erro ao procurar cliente.",
+      details: error.message,
+    });
   }
 };
 
@@ -114,15 +186,17 @@ endpointsFunction.getClienteByNome = async (req, res) => {
   try {
     const cliente = await Clientes.findOne({ where: { nome } });
     if (!cliente) {
-      return res
-        .status(404)
-        .json({ status: "error", message: "Cliente não encontrado." });
+      return res.status(404).json({
+        status: "error",
+        message: "Cliente não encontrado.",
+      });
     }
     res.status(200).json({ status: "success", data: cliente });
   } catch (error) {
-    res
-      .status(500)
-      .json({ status: "error", message: "Erro ao procurar cliente." });
+    res.status(500).json({
+      status: "error",
+      message: "Erro ao procurar cliente.",
+    });
   }
 };
 
@@ -154,9 +228,10 @@ endpointsFunction.getFichaTecnicaByCliente = async (req, res) => {
     });
 
     if (!cliente) {
-      return res
-        .status(404)
-        .json({ status: "error", message: "Cliente não encontrado." });
+      return res.status(404).json({
+        status: "error",
+        message: "Cliente não encontrado.",
+      });
     }
 
     res.status(200).json({ status: "success", data: cliente });
