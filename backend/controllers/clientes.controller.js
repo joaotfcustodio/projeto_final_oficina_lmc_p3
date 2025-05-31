@@ -200,48 +200,4 @@ endpointsFunction.getClienteByNome = async (req, res) => {
   }
 };
 
-// Ficha técnica completa
-endpointsFunction.getFichaTecnicaByCliente = async (req, res) => {
-  const { nif } = req.params;
-  try {
-    const cliente = await Clientes.findOne({
-      where: { nif },
-      include: [
-        {
-          model: Veiculos,
-          as: "veiculos",
-          through: { attributes: [] },
-          include: [
-            {
-              model: Reparacoes,
-              as: "reparacoes",
-              include: [
-                {
-                  model: MaterialUtilizado,
-                  as: "material_utilizado",
-                },
-              ],
-            },
-          ],
-        },
-      ],
-    });
-
-    if (!cliente) {
-      return res.status(404).json({
-        status: "error",
-        message: "Cliente não encontrado.",
-      });
-    }
-
-    res.status(200).json({ status: "success", data: cliente });
-  } catch (error) {
-    res.status(500).json({
-      status: "error",
-      message: "Erro ao obter ficha técnica.",
-      details: error.message,
-    });
-  }
-};
-
 module.exports = endpointsFunction;
