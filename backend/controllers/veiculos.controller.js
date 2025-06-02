@@ -178,12 +178,22 @@ endpointsFunction.updateVeiculo = async (req, res) => {
   }
 };
 
-// Eliminar veículo
+// Eliminar veículo (com desassociação e limpeza completa)
 endpointsFunction.deleteVeiculo = async (req, res) => {
   try {
     const { matricula } = req.params;
 
-    const veiculo = await Veiculo.findByPk(matricula);
+    const veiculo = await Veiculo.findByPk(matricula, {
+      include: [
+        { model: Cliente, as: "clientes" },
+        {
+          model: Reparacao,
+          as: "reparacoes",
+          include: [{ model: MaterialUtilizado, as: "material_utilizado" }],
+        },
+      ],
+    });
+
     if (!veiculo) {
       return res.status(404).json({
         status: "error",
@@ -191,6 +201,20 @@ endpointsFunction.deleteVeiculo = async (req, res) => {
       });
     }
 
+    // Desassociar clientes (tabela N:M)
+    await veiculo.setClientes([]); // limpa a tabela clientes_veiculos
+
+    // Eliminar materiais e reparações
+    if (veiculo.reparacoes && veiculo.reparacoes.length > 0) {
+      for (const reparacao of veiculo.reparacoes) {
+        if (reparacao.material_utilizado) {
+          await reparacao.material_utilizado.destroy();
+        }
+        await reparacao.destroy();
+      }
+    }
+
+    // Eliminar o veículo
     await veiculo.destroy();
 
     res.status(200).json({
@@ -198,6 +222,7 @@ endpointsFunction.deleteVeiculo = async (req, res) => {
       message: "Veículo eliminado com sucesso.",
     });
   } catch (err) {
+    console.error("Erro ao eliminar veículo:", err);
     res.status(500).json({
       status: "error",
       message: "Erro ao eliminar veículo.",

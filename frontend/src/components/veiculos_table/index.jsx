@@ -10,45 +10,48 @@ import "./styles.css";
 
 const VeiculoTable = ({ onEdit, reloadSignal }) => {
   const [veiculos, setVeiculos] = useState([]);
-  const [filtro, setFiltro] = useState("");
   const [resultado, setResultado] = useState([]);
+  const [filtro, setFiltro] = useState("");
+  const [mostrarTodos, setMostrarTodos] = useState(false);
 
-  useEffect(() => {
-    carregarVeiculos();
-  }, []);
-
-  // Atualiza a tabela sempre que reloadSignal mudar
   useEffect(() => {
     if (reloadSignal !== undefined) {
-      carregarVeiculos();
+      listarTodosVeiculos();
     }
   }, [reloadSignal]);
 
-  const carregarVeiculos = async () => {
+  const listarTodosVeiculos = async () => {
     try {
       const res = await axios.get("http://localhost:5000/api/v1/veiculos", {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
       });
+
       const data = res.data.data || [];
+
       setVeiculos(data);
-      setResultado(data);
+      setResultado(data); // mostra todos ao clicar no botão
+      setMostrarTodos(true); // ativa modo "mostrar todos"
     } catch (error) {
       console.error("Erro ao carregar veículos:", error);
     }
   };
 
-  const handleProcurar = () => {
-    if (!filtro.trim()) {
-      setResultado(veiculos);
-      return;
+  // Atualiza resultado com base no filtro (exceto se mostrarTodos estiver ativo)
+  useEffect(() => {
+    if (!mostrarTodos) {
+      if (!filtro.trim()) {
+        setResultado([]); // tabela vazia até começar a escrever
+        return;
+      }
+
+      const filtrados = veiculos.filter((v) =>
+        v.matricula.toLowerCase().includes(filtro.toLowerCase())
+      );
+      setResultado(filtrados);
     }
-    const veiculoEncontrado = veiculos.filter((v) =>
-      v.matricula.toLowerCase().includes(filtro.toLowerCase())
-    );
-    setResultado(veiculoEncontrado);
-  };
+  }, [filtro, veiculos, mostrarTodos]);
 
   const handleEliminar = async (matricula) => {
     if (!window.confirm("Tem a certeza que deseja eliminar este veículo?")) return;
@@ -59,7 +62,7 @@ const VeiculoTable = ({ onEdit, reloadSignal }) => {
           Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
       });
-      carregarVeiculos();
+      await listarTodosVeiculos(); // após eliminar, volta a listar todos
     } catch (error) {
       alert("Erro ao eliminar veículo.");
     }
@@ -68,14 +71,17 @@ const VeiculoTable = ({ onEdit, reloadSignal }) => {
   return (
     <div className="veiculos-card">
       <div className="veiculos-header">
-        <div className="veiculos-controls-row" style={{ display: "flex", gap: "0.5rem", alignItems: "center" }}>
+        <div style={{ display: "flex", gap: "0.5rem", alignItems: "center" }}>
           <Input
             type="text"
             placeholder="Filtrar por matrícula"
             value={filtro}
-            onChange={(e) => setFiltro(e.target.value)}
+            onChange={(e) => {
+              setFiltro(e.target.value);
+              setMostrarTodos(false); // volta a filtrar
+            }}
           />
-          <Button onClick={handleProcurar}>Procurar</Button>
+          <Button onClick={listarTodosVeiculos}>Listar Todos</Button>
         </div>
       </div>
 
@@ -102,7 +108,7 @@ const VeiculoTable = ({ onEdit, reloadSignal }) => {
                   <td>{v.cor}</td>
                   <td>{v.ano}</td>
                   <td>
-                    {v.clientes && v.clientes.length > 0
+                    {v.clientes?.length > 0
                       ? v.clientes.map((c) => c.nif).join(", ")
                       : "—"}
                   </td>
