@@ -1,11 +1,11 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import axios from "axios";
 import Input from "@/components/ui/input";
 import Button from "@/components/ui/button";
 import SearchIcon from "@mui/icons-material/Search";
 import "./styles.css";
 
-const VeiculosPorClienteTable = () => {
+const VeiculosPorClienteTable = ({ reloadSignal }) => {
   const [nifBusca, setNifBusca] = useState("");
   const [resultado, setResultado] = useState(null);
   const [erro, setErro] = useState("");
@@ -31,6 +31,14 @@ const VeiculosPorClienteTable = () => {
       setErro("Cliente não encontrado ou erro ao buscar dados.");
     }
   };
+
+  // 🔁 Atualizar automaticamente se já há um NIF e o signal mudar
+  useEffect(() => {
+    if (nifBusca.trim()) {
+      procurarVeiculos();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [reloadSignal]);
 
   return (
     <div className="clientes-card">

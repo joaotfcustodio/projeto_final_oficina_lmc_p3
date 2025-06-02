@@ -3,14 +3,12 @@ import axios from "axios";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 
-
 import Button from "@/components/ui/button";
 import Input from "@/components/ui/input";
 
-
 import "./styles.css";
 
-const VeiculoTable = ({ onEdit }) => {
+const VeiculoTable = ({ onEdit, reloadSignal }) => {
   const [veiculos, setVeiculos] = useState([]);
   const [filtro, setFiltro] = useState("");
   const [resultado, setResultado] = useState([]);
@@ -18,6 +16,13 @@ const VeiculoTable = ({ onEdit }) => {
   useEffect(() => {
     carregarVeiculos();
   }, []);
+
+  // Atualiza a tabela sempre que reloadSignal mudar
+  useEffect(() => {
+    if (reloadSignal !== undefined) {
+      carregarVeiculos();
+    }
+  }, [reloadSignal]);
 
   const carregarVeiculos = async () => {
     try {

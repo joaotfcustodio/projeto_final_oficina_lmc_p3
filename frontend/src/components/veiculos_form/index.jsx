@@ -22,11 +22,11 @@ const VeiculoForm = ({ onCreated, veiculoEditavel, onCancelEdit }) => {
     if (veiculoEditavel) {
       setForm({
         nif: veiculoEditavel.clientes?.[0]?.nif || "",
-        marca: veiculoEditavel.marca,
-        modelo: veiculoEditavel.modelo,
-        matricula: veiculoEditavel.matricula,
-        cor: veiculoEditavel.cor,
-        ano: veiculoEditavel.ano,
+        marca: veiculoEditavel.marca || "",
+        modelo: veiculoEditavel.modelo || "",
+        matricula: veiculoEditavel.matricula || "",
+        cor: veiculoEditavel.cor || "",
+        ano: veiculoEditavel.ano || "",
       });
       setModoEdicao(true);
     } else {
@@ -64,20 +64,30 @@ const VeiculoForm = ({ onCreated, veiculoEditavel, onCancelEdit }) => {
 
     try {
       if (modoEdicao) {
-        await axios.put(`http://localhost:5000/api/v1/veiculos/${form.matricula}`, form, {
-          headers,
-        });
-        setMensagem("Veículo atualizado com sucesso!");
+        const res = await axios.put(
+          `http://localhost:5000/api/v1/veiculos/${form.matricula}`,
+          form,
+          { headers }
+        );
+        if (res.data.status === "success") {
+          setMensagem("Veículo atualizado com sucesso!");
+          setTipoMensagem("success");
+          onCreated?.(); // ✅ dispara reload da tabela
+          limparFormulario();
+        }
       } else {
-        await axios.post("http://localhost:5000/api/v1/veiculos", form, {
-          headers,
-        });
-        setMensagem("Veículo adicionado com sucesso!");
+        const res = await axios.post(
+          "http://localhost:5000/api/v1/veiculos",
+          form,
+          { headers }
+        );
+        if (res.data.status === "success") {
+          setMensagem("Veículo adicionado com sucesso!");
+          setTipoMensagem("success");
+          onCreated?.(); // ✅ dispara reload da tabela
+          limparFormulario();
+        }
       }
-
-      setTipoMensagem("success");
-      limparFormulario();
-      onCreated?.();
     } catch (error) {
       let erroMsg = "Erro ao processar veículo.";
       if (error.response?.data?.message) {
@@ -95,7 +105,7 @@ const VeiculoForm = ({ onCreated, veiculoEditavel, onCancelEdit }) => {
         value={form.nif}
         onChange={handleChange}
         placeholder="NIF do Cliente"
-        disabled={modoEdicao}
+        required
       />
       <Input
         name="marca"
@@ -145,7 +155,11 @@ const VeiculoForm = ({ onCreated, veiculoEditavel, onCancelEdit }) => {
       )}
 
       <div className="btn-group" style={{ marginTop: "1rem" }}>
-        <Button  className="btn-adicionar" type="submit" theme={modoEdicao ? "primary" : "default"}>
+        <Button
+          className="btn-adicionar"
+          type="submit"
+          theme={modoEdicao ? "primary" : "default"}
+        >
           {modoEdicao ? "Atualizar" : "Adicionar"}
         </Button>
         <Button type="button" theme="secondary" onClick={limparFormulario}>
