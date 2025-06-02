@@ -8,7 +8,7 @@ import VeiculosPage from "./pages/veiculos/index";
 
 import Layout from "./components/layout";
 import LoginUi from "./components/login/LoginUi";
-import PrivateRoute from "./components/PrivateRoute"; // 👈 Importa
+import PrivateRoute from "./components/PrivateRoute";
 
 import "./App.css";
 
