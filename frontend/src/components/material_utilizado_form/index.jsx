@@ -1,14 +1,10 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
-
-// Components
 import Button from "@/components/ui/button";
 import Input from "@/components/ui/input";
-
-// Styles
 import "./styles.css";
 
-const MaterialUtilizadoForm = ({ material }) => {
+const MaterialUtilizadoForm = ({ material, onSuccess }) => {
   const initialFormState = {
     id_reparacao: "",
     marca_tinta: "",
@@ -22,7 +18,6 @@ const MaterialUtilizadoForm = ({ material }) => {
     massa_polimento: "",
     quantidade_gasoleo_estufa: "",
     preco_gasoleo_estufa_lt: "",
-    preco_total_material_carro: "",
   };
 
   const [form, setForm] = useState(initialFormState);
@@ -44,6 +39,20 @@ const MaterialUtilizadoForm = ({ material }) => {
     setModoEdicao(false);
   };
 
+  const parseFloatSafe = (val) => {
+    const num = parseFloat(val);
+    return isNaN(num) ? 0 : num;
+  };
+
+  const calcularPrecoTotal = () => {
+    return (
+      parseFloatSafe(form.preco_tinta_carro) +
+      parseFloatSafe(form.preco_verniz_carro) +
+      parseFloatSafe(form.preco_tinta_jantes) +
+      parseFloatSafe(form.preco_gasoleo_estufa_lt)
+    ).toFixed(2);
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -52,18 +61,19 @@ const MaterialUtilizadoForm = ({ material }) => {
     };
 
     const payload = {
-      ...form,
       id_reparacao: parseInt(form.id_reparacao),
-      preco_tinta_carro: parseFloat(form.preco_tinta_carro),
-      preco_tinta_jantes: parseFloat(form.preco_tinta_jantes),
-      preco_verniz_carro: parseFloat(form.preco_verniz_carro),
-      quantidade_tinta: parseFloat(form.quantidade_tinta),
-      quantidade_tinta_jantes: parseFloat(form.quantidade_tinta_jantes),
-      quantidade_verniz: parseFloat(form.quantidade_verniz),
-      massa_polimento: parseFloat(form.massa_polimento),
-      quantidade_gasoleo_estufa: parseFloat(form.quantidade_gasoleo_estufa),
-      preco_gasoleo_estufa_lt: parseFloat(form.preco_gasoleo_estufa_lt),
-      preco_total_material_carro: parseFloat(form.preco_total_material_carro),
+      marca_tinta: form.marca_tinta || "",
+      marca_verniz: form.marca_verniz || "",
+      preco_tinta_carro: parseFloatSafe(form.preco_tinta_carro),
+      preco_tinta_jantes: parseFloatSafe(form.preco_tinta_jantes),
+      preco_verniz_carro: parseFloatSafe(form.preco_verniz_carro),
+      quantidade_tinta: parseFloatSafe(form.quantidade_tinta),
+      quantidade_tinta_jantes: parseFloatSafe(form.quantidade_tinta_jantes),
+      quantidade_verniz: parseFloatSafe(form.quantidade_verniz),
+      massa_polimento: form.massa_polimento || "",
+      quantidade_gasoleo_estufa: parseFloatSafe(form.quantidade_gasoleo_estufa),
+      preco_gasoleo_estufa_lt: parseFloatSafe(form.preco_gasoleo_estufa_lt),
+      preco_total_material_carro: parseFloatSafe(calcularPrecoTotal()),
     };
 
     if (isNaN(payload.id_reparacao)) {
@@ -88,6 +98,8 @@ const MaterialUtilizadoForm = ({ material }) => {
 
       setForm(initialFormState);
       setModoEdicao(false);
+
+      if (onSuccess) onSuccess(); 
     } catch (err) {
       console.error("Erro ao salvar material:", err);
       alert("Erro ao salvar material. Verifica os dados.");
@@ -104,7 +116,7 @@ const MaterialUtilizadoForm = ({ material }) => {
           value={form.id_reparacao}
           type="number"
           required
-          disabled={modoEdicao} // Evita alterar ID no modo de edição
+          disabled={modoEdicao}
         />
         <Input name="marca_tinta" placeholder="Marca da Tinta" onChange={handleChange} value={form.marca_tinta} />
         <Input name="marca_verniz" placeholder="Marca do Verniz" onChange={handleChange} value={form.marca_verniz} />
@@ -114,11 +126,11 @@ const MaterialUtilizadoForm = ({ material }) => {
         <Input name="quantidade_tinta" placeholder="Qtd Tinta (L)" onChange={handleChange} value={form.quantidade_tinta} type="number" />
         <Input name="quantidade_tinta_jantes" placeholder="Qtd Tinta Jantes (L)" onChange={handleChange} value={form.quantidade_tinta_jantes} type="number" />
         <Input name="quantidade_verniz" placeholder="Qtd Verniz (L)" onChange={handleChange} value={form.quantidade_verniz} type="number" />
-        <Input name="massa_polimento" placeholder="Massa Polimento (kg)" onChange={handleChange} value={form.massa_polimento} type="number" />
+        <Input name="massa_polimento" placeholder="Massa Polimento (kg)" onChange={handleChange} value={form.massa_polimento} />
         <Input name="quantidade_gasoleo_estufa" placeholder="Qtd Gasóleo Estufa (L)" onChange={handleChange} value={form.quantidade_gasoleo_estufa} type="number" />
         <Input name="preco_gasoleo_estufa_lt" placeholder="Preço Gasóleo/L" onChange={handleChange} value={form.preco_gasoleo_estufa_lt} type="number" />
-        <Input name="preco_total_material_carro" placeholder="Preço Total Material (€)" onChange={handleChange} value={form.preco_total_material_carro} type="number" />
       </div>
+
       <div style={{ marginTop: "1rem", display: "flex", gap: "1rem" }}>
         <div className="button-group">
           <Button type="submit" className="small-button">

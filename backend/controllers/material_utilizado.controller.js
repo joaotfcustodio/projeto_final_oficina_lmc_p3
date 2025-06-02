@@ -100,29 +100,6 @@ endpointsFunction.getMaterialByReparacao = async (req, res) => {
   }
 };
 
-// Obter todos os materiais com info da reparação e veículo
-endpointsFunction.getMateriaisComVeiculo = async (req, res) => {
-  try {
-    const materiais = await MaterialUtilizado.findAll({
-      include: {
-        model: Reparacao,
-        include: Veiculo,
-      },
-    });
-
-    res.status(200).json({
-      status: "success",
-      materiais,
-    });
-  } catch (err) {
-    res.status(500).json({
-      status: "error",
-      message: "Erro ao obter materiais com informação do veículo.",
-      error: err.message,
-    });
-  }
-};
-
 // Atualizar material utilizado de uma reparação através do id_reparacao
 endpointsFunction.updateMaterialByReparacao = async (req, res) => {
   try {
