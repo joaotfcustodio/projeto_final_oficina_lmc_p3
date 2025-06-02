@@ -16,7 +16,6 @@ const MaterialUtilizadoForm = ({ material, onSuccess }) => {
     quantidade_tinta_jantes: "",
     quantidade_verniz: "",
     massa_polimento: "",
-    quantidade_gasoleo_estufa: "",
     preco_gasoleo_estufa_lt: "",
   };
 
@@ -40,8 +39,9 @@ const MaterialUtilizadoForm = ({ material, onSuccess }) => {
   };
 
   const parseFloatSafe = (val) => {
+    if (val === "" || val === null || val === undefined) return undefined;
     const num = parseFloat(val);
-    return isNaN(num) ? 0 : num;
+    return isNaN(num) ? undefined : num;
   };
 
   const calcularPrecoTotal = () => {
@@ -71,7 +71,6 @@ const MaterialUtilizadoForm = ({ material, onSuccess }) => {
       quantidade_tinta_jantes: parseFloatSafe(form.quantidade_tinta_jantes),
       quantidade_verniz: parseFloatSafe(form.quantidade_verniz),
       massa_polimento: form.massa_polimento || "",
-      quantidade_gasoleo_estufa: parseFloatSafe(form.quantidade_gasoleo_estufa),
       preco_gasoleo_estufa_lt: parseFloatSafe(form.preco_gasoleo_estufa_lt),
       preco_total_material_carro: parseFloatSafe(calcularPrecoTotal()),
     };
@@ -98,8 +97,7 @@ const MaterialUtilizadoForm = ({ material, onSuccess }) => {
 
       setForm(initialFormState);
       setModoEdicao(false);
-
-      if (onSuccess) onSuccess(); 
+      if (onSuccess) onSuccess();
     } catch (err) {
       console.error("Erro ao salvar material:", err);
       alert("Erro ao salvar material. Verifica os dados.");
@@ -127,8 +125,7 @@ const MaterialUtilizadoForm = ({ material, onSuccess }) => {
         <Input name="quantidade_tinta_jantes" placeholder="Qtd Tinta Jantes (L)" onChange={handleChange} value={form.quantidade_tinta_jantes} type="number" />
         <Input name="quantidade_verniz" placeholder="Qtd Verniz (L)" onChange={handleChange} value={form.quantidade_verniz} type="number" />
         <Input name="massa_polimento" placeholder="Massa Polimento (kg)" onChange={handleChange} value={form.massa_polimento} />
-        <Input name="quantidade_gasoleo_estufa" placeholder="Qtd Gasóleo Estufa (L)" onChange={handleChange} value={form.quantidade_gasoleo_estufa} type="number" />
-        <Input name="preco_gasoleo_estufa_lt" placeholder="Preço Gasóleo/L" onChange={handleChange} value={form.preco_gasoleo_estufa_lt} type="number" />
+        <Input name="preco_gasoleo_estufa_lt" placeholder="Preço Gasóleo Estufa" onChange={handleChange} value={form.preco_gasoleo_estufa_lt} type="number" />
       </div>
 
       <div style={{ marginTop: "1rem", display: "flex", gap: "1rem" }}>

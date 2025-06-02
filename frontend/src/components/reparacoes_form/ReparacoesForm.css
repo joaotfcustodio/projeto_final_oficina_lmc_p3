@@ -64,7 +64,6 @@
 .reparacao-table {
     width: 100%;
     border-collapse: collapse;
-    table-layout: fixed;
 }
 
 .reparacao-table thead th {
@@ -78,4 +77,6 @@
 
 .reparacao-table td {
     padding: 0.5rem;
-    border-bottom: 0.0625rem solid #eee; }
+    border-bottom: 0.0625rem solid #eee;
+    word-break: break-word;
+}

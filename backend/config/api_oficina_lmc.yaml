@@ -761,7 +761,7 @@ components:
           items: 
             $ref: '#/components/schemas/Reparacoes'
     
-    MaterialUtilizado:   
+    MaterialUtilizado:
       required:
         - id_material_utilizado
         - preco_verniz_carro
@@ -785,7 +785,7 @@ components:
           format: int32
           description: Chave primária da entidade material_utilizado
           example: 1
-        perco_verniz_carro:
+        preco_verniz_carro:
           type: number
           format: float
           description: Preço final do verniz utilizado (Em Litros)
@@ -793,7 +793,7 @@ components:
         quantidade_gasoleo_estufa_total:
           type: number
           format: float
-          description: Quantidade de gasoleo gasto na reparação do veículo (Em litros)
+          description: Quantidade de gasóleo gasto na reparação do veículo (Em litros)
           example: 10
         quantidade_tinta_jantes:
           type: number
@@ -814,7 +814,7 @@ components:
           type: number
           format: float
           description: Preço final do material utilizado no carro
-          example: 219.99  
+          example: 219.99
         massa_polimento:
           type: string
           description: Marca da massa de polimento utilizada
@@ -827,7 +827,7 @@ components:
         preco_tinta_carro:
           type: number
           format: float
-          description: Preço final da tinta utilizada na pintura do veículo 
+          description: Preço final da tinta utilizada na pintura do veículo
           example: 44.99
         marca_verniz:
           type: string
@@ -847,9 +847,10 @@ components:
           format: float
           description: Preço da tinta utilizada na pintura das jantes
           example: 29.99
-
+        Reparacao:
+          $ref: '#/components/schemas/Reparacoes'
         total_material_utilizado:
           type: array
           description: Lista de material utilizado em cada reparação.
-          items: 
-            $ref: '#/components/schemas/MaterialUtilizado'     
+          items:
+            $ref: '#/components/schemas/MaterialUtilizado'   

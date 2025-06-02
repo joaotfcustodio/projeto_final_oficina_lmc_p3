@@ -1,51 +1,39 @@
 import React, { useState } from "react";
 
-
 import AdicionarReparacao from "@/components/reparacoes_form/adicionarReparacao";
-import Card from "@/components/card";
 import ReparacaoForm from "@/components/reparacoes_form/ReparacoesForm";
-
+import Card from "@/components/card";
 
 import "./styles.css";
 
 const ReparacoesPage = () => {
-  const [reparacoes, setReparacoes] = useState([]);
   const [reparacaoSelecionada, setReparacaoSelecionada] = useState(null);
   const [matriculaAtual, setMatriculaAtual] = useState("");
+  const [reload, setReload] = useState(false);
 
-  const handleAdicionarReparacao = (reparacaoAtualizada) => {
-    setReparacoes((prev) => {
-      const index = prev.findIndex(
-        (r) => r.id_reparacao === reparacaoAtualizada.id_reparacao
-      );
-      if (index !== -1) {
-        const copia = [...prev];
-        copia[index] = reparacaoAtualizada;
-        return copia;
-      } else {
-        return [...prev, reparacaoAtualizada];
-      }
-    });
-
+  const handleAtualizarTabela = () => {
     setReparacaoSelecionada(null);
+    setReload(prev => !prev); // Altera o estado para forçar o reload
   };
 
   return (
     <div className="reparacoes-page">
       <h1 className="reparacoes-title">ÁREA DE REPARAÇÕES</h1>
       <div className="reparacoes-container">
-        <Card title="Adicionar Reparação">
+        <Card title={reparacaoSelecionada ? "Editar Reparação" : "Adicionar Reparação"}>
           <AdicionarReparacao
-            onAdicionar={handleAdicionarReparacao}
+            onAtualizarTabela={handleAtualizarTabela}
             reparacaoSelecionada={reparacaoSelecionada}
+            onCancelEdit={() => setReparacaoSelecionada(null)}
           />
         </Card>
+
         <Card title="Reparações">
           <ReparacaoForm
-            reparacoesExternas={reparacoes}
             onEditar={setReparacaoSelecionada}
             matriculaFiltro={matriculaAtual}
             setMatriculaFiltro={setMatriculaAtual}
+            reloadSignal={reload}
           />
         </Card>
       </div>

@@ -9,18 +9,17 @@ import Input from "@/components/ui/input";
 import "./styles.css";
 
 const VeiculoTable = ({ onEdit, reloadSignal }) => {
-  const [veiculos, setVeiculos] = useState([]);
-  const [resultado, setResultado] = useState([]);
+  const [todosVeiculos, setTodosVeiculos] = useState([]);
+  const [veiculosVisiveis, setVeiculosVisiveis] = useState([]);
   const [filtro, setFiltro] = useState("");
-  const [mostrarTodos, setMostrarTodos] = useState(false);
 
   useEffect(() => {
     if (reloadSignal !== undefined) {
-      listarTodosVeiculos();
+      obterTodosVeiculos();
     }
   }, [reloadSignal]);
 
-  const listarTodosVeiculos = async () => {
+  const obterTodosVeiculos = async () => {
     try {
       const res = await axios.get("http://localhost:5000/api/v1/veiculos", {
         headers: {
@@ -29,29 +28,26 @@ const VeiculoTable = ({ onEdit, reloadSignal }) => {
       });
 
       const data = res.data.data || [];
-
-      setVeiculos(data);
-      setResultado(data); // mostra todos ao clicar no botão
-      setMostrarTodos(true); // ativa modo "mostrar todos"
+      setTodosVeiculos(data);
+      setVeiculosVisiveis(data);
+      setFiltro(""); // Limpa filtro quando clico em "Listar Todos"
     } catch (error) {
       console.error("Erro ao carregar veículos:", error);
     }
   };
 
-  // Atualiza resultado com base no filtro (exceto se mostrarTodos estiver ativo)
-  useEffect(() => {
-    if (!mostrarTodos) {
-      if (!filtro.trim()) {
-        setResultado([]); // tabela vazia até começar a escrever
-        return;
-      }
 
-      const filtrados = veiculos.filter((v) =>
-        v.matricula.toLowerCase().includes(filtro.toLowerCase())
-      );
-      setResultado(filtrados);
+  useEffect(() => {
+    if (filtro.trim() === "") {
+      setVeiculosVisiveis([]);
+      return;
     }
-  }, [filtro, veiculos, mostrarTodos]);
+
+    const filtrados = todosVeiculos.filter((v) =>
+      v.matricula.toLowerCase().includes(filtro.toLowerCase())
+    );
+    setVeiculosVisiveis(filtrados);
+  }, [filtro, todosVeiculos]);
 
   const handleEliminar = async (matricula) => {
     if (!window.confirm("Tem a certeza que deseja eliminar este veículo?")) return;
@@ -62,7 +58,7 @@ const VeiculoTable = ({ onEdit, reloadSignal }) => {
           Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
       });
-      await listarTodosVeiculos(); // após eliminar, volta a listar todos
+      await obterTodosVeiculos(); // atualiza após eliminar
     } catch (error) {
       alert("Erro ao eliminar veículo.");
     }
@@ -76,12 +72,9 @@ const VeiculoTable = ({ onEdit, reloadSignal }) => {
             type="text"
             placeholder="Filtrar por matrícula"
             value={filtro}
-            onChange={(e) => {
-              setFiltro(e.target.value);
-              setMostrarTodos(false); // volta a filtrar
-            }}
+            onChange={(e) => setFiltro(e.target.value)}
           />
-          <Button onClick={listarTodosVeiculos}>Listar Todos</Button>
+          <Button onClick={obterTodosVeiculos}>Listar Todos</Button>
         </div>
       </div>
 
@@ -99,34 +92,24 @@ const VeiculoTable = ({ onEdit, reloadSignal }) => {
             </tr>
           </thead>
           <tbody>
-            {resultado.length > 0 ? (
-              resultado.map((v, index) => (
+            {(filtro.trim() === "" ? todosVeiculos : veiculosVisiveis).length > 0 ? (
+              (filtro.trim() === "" ? todosVeiculos : veiculosVisiveis).map((v, index) => (
                 <tr key={index}>
                   <td>{v.matricula}</td>
                   <td>{v.marca}</td>
                   <td>{v.modelo}</td>
                   <td>{v.cor}</td>
                   <td>{v.ano}</td>
-                  <td>
-                    {v.clientes?.length > 0
-                      ? v.clientes.map((c) => c.nif).join(", ")
-                      : "—"}
-                  </td>
+                  <td>{v.clientes?.map((c) => c.nif).join(", ") || "—"}</td>
                   <td>
                     <div className="veiculo-actions">
-                      <Button
-                        className="veiculo-button"
-                        title="Editar"
-                        variant="icon"
-                        onClick={() => onEdit?.(v)}
-                      >
+                      <Button variant="icon" title="Editar" onClick={() => onEdit?.(v)}>
                         <EditIcon />
                       </Button>
                       <Button
-                        className="veiculo-button"
-                        title="Eliminar"
                         variant="icon"
                         theme="secondary"
+                        title="Eliminar"
                         onClick={() => handleEliminar(v.matricula)}
                       >
                         <DeleteIcon color="error" />

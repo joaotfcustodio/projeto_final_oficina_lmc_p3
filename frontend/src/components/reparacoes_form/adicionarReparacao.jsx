@@ -33,7 +33,7 @@ const servicosMap = {
 
 const servicosDisponiveis = Object.keys(servicosMap);
 
-const AdicionarReparacao = ({ onAdicionar, reparacaoSelecionada }) => {
+const AdicionarReparacao = ({ onAtualizarTabela, reparacaoSelecionada, onCancelEdit }) => {
   const [matricula, setMatricula] = useState("");
   const [preco, setPreco] = useState("");
   const [servicosSelecionados, setServicosSelecionados] = useState([]);
@@ -47,8 +47,18 @@ const AdicionarReparacao = ({ onAdicionar, reparacaoSelecionada }) => {
         .filter(([label, campo]) => reparacaoSelecionada[campo])
         .map(([label]) => label);
       setServicosSelecionados(ativos);
+    } else {
+      limparFormulario();
     }
   }, [reparacaoSelecionada]);
+
+  const limparFormulario = () => {
+    setMatricula("");
+    setPreco("");
+    setServicosSelecionados([]);
+    setMensagem(null);
+    onCancelEdit?.();
+  };
 
   const handleCheckboxChange = (servico) => {
     setServicosSelecionados((prev) =>
@@ -86,21 +96,14 @@ const AdicionarReparacao = ({ onAdicionar, reparacaoSelecionada }) => {
           novaReparacao,
           { headers }
         );
-        onAdicionar({ ...novaReparacao, id_reparacao: reparacaoSelecionada.id_reparacao });
         setMensagem("Reparação atualizada com sucesso!");
       } else {
-        const res = await axios.post(
-          "http://localhost:5000/api/v1/reparacoes",
-          novaReparacao,
-          { headers }
-        );
-        onAdicionar({ ...novaReparacao, id_reparacao: res.data.id_reparacao });
+        await axios.post("http://localhost:5000/api/v1/reparacoes", novaReparacao, { headers });
         setMensagem("Reparação adicionada com sucesso!");
       }
 
-      setMatricula("");
-      setPreco("");
-      setServicosSelecionados([]);
+      onAtualizarTabela?.(); 
+      limparFormulario();
     } catch (err) {
       console.error("Erro ao submeter reparação:", err);
       if (err.response?.status === 404) {
@@ -158,9 +161,16 @@ const AdicionarReparacao = ({ onAdicionar, reparacaoSelecionada }) => {
         </div>
       )}
 
-      <Button type="submit">
-        {reparacaoSelecionada ? "Editar Reparação" : "Adicionar Reparação"}
-      </Button>
+      <div style={{ display: "flex", gap: "0.5rem", marginTop: "1rem" }}>
+        <Button type="submit">
+          {reparacaoSelecionada ? "Atualizar Reparação" : "Adicionar Reparação"}
+        </Button>
+        {reparacaoSelecionada && (
+          <Button type="button" theme="secondary" onClick={limparFormulario}>
+            Cancelar
+          </Button>
+        )}
+      </div>
     </form>
   );
 };

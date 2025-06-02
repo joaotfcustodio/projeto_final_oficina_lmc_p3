@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import SearchIcon from "@mui/icons-material/Search";
@@ -9,18 +9,26 @@ import axios from "axios";
 import "./ReparacoesForm.css";
 
 const ReparacaoForm = ({
-  reparacoesExternas = [],
-  onEditar = () => {},
+  onEditar,
   matriculaFiltro,
-  setMatriculaFiltro
+  setMatriculaFiltro,
+  reloadSignal
 }) => {
   const [mensagem, setMensagem] = useState(null);
-  const [reparacoes, setReparacoes] = useState(reparacoesExternas);
+  const [reparacoes, setReparacoes] = useState([]);
   const [matriculaInterna, setMatriculaInterna] = useState("");
+
   const matricula = matriculaFiltro ?? matriculaInterna;
   const setMatricula = setMatriculaFiltro ?? setMatriculaInterna;
 
-  const buscarReparacoes = async (matricula) => {
+
+  useEffect(() => {
+    if (matricula.trim()) {
+      buscarReparacoes();
+    }
+  }, [reloadSignal]);
+
+  const buscarReparacoes = async () => {
     try {
       const headers = {
         Authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -32,9 +40,9 @@ const ReparacaoForm = ({
       setReparacoes(res.data.reparacoes || []);
       setMensagem(null);
     } catch (err) {
+      setReparacoes([]);
       if (err.response?.status === 404) {
         setMensagem("Matrícula não se encontra na base de dados.");
-        setReparacoes([]);
       } else {
         setMensagem("Erro ao carregar reparações.");
       }
@@ -49,26 +57,19 @@ const ReparacaoForm = ({
       const headers = {
         Authorization: `Bearer ${localStorage.getItem("token")}`,
       };
-      await axios.delete(`http://localhost:5000/api/v1/reparacoes/${id}`, {
-        headers,
-      });
+      await axios.delete(`http://localhost:5000/api/v1/reparacoes/${id}`, { headers });
       setReparacoes((prev) => prev.filter((r) => r.id_reparacao !== id));
     } catch (err) {
       alert("Erro ao eliminar reparação.");
     }
   };
 
-  const formatarCampo = (campo) => {
-    return campo
-      .replace(/_/g, " ")
-      .replace(/\b\w/g, (l) => l.toUpperCase());
-  };
+  const formatarCampo = (campo) =>
+    campo.replace(/_/g, " ").replace(/\b\w/g, (l) => l.toUpperCase());
 
-  const reparacoesFiltradas = Array.isArray(reparacoes)
-    ? reparacoes.filter(
-        (r) => r.matricula.toLowerCase() === matricula.toLowerCase()
-      )
-    : [];
+  const reparacoesFiltradas = reparacoes.filter((r) =>
+    r.matricula.toLowerCase().includes(matricula.toLowerCase())
+  );
 
   return (
     <>
@@ -80,7 +81,7 @@ const ReparacaoForm = ({
             value={matricula}
             onChange={(e) => setMatricula(e.target.value)}
           />
-          <Button title="Procurar" variant="icon" onClick={() => buscarReparacoes(matricula)}>
+          <Button title="Procurar" variant="icon" onClick={buscarReparacoes}>
             <SearchIcon style={{ height: "20px", width: "20px" }} />
           </Button>
         </div>
@@ -90,6 +91,7 @@ const ReparacaoForm = ({
           </div>
         )}
       </div>
+
       <div className="reparacao-table-container">
         <table className="reparacao-table">
           <thead>

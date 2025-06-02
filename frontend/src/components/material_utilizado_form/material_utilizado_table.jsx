@@ -26,12 +26,12 @@ const calcularPrecoTotalMaterial = (material) => {
   return total.toFixed(2);
 };
 
-const MaterialUtilizadoTable = ({ materiais, onEditar, carregarMaterialPorId }) => {
+const MaterialUtilizadoTable = ({ materiais = [], onEditar, carregarMaterialPorId }) => {
   const [filtro, setFiltro] = useState("");
 
   const procurarMaterialPorId = async () => {
     if (!filtro.trim()) return;
-    await carregarMaterialPorId(filtro); // chama função do pai
+    await carregarMaterialPorId(filtro); 
   };
 
   const eliminarMaterial = async (id_reparacao) => {
@@ -48,7 +48,7 @@ const MaterialUtilizadoTable = ({ materiais, onEditar, carregarMaterialPorId }) 
       );
 
       alert("Material eliminado com sucesso!");
-      await carregarMaterialPorId(id_reparacao); // recarrega para limpar a tabela se necessário
+      await carregarMaterialPorId(id_reparacao); 
     } catch (err) {
       console.error("Erro ao eliminar material:", err);
       alert("Erro ao eliminar material.");
@@ -83,7 +83,6 @@ const MaterialUtilizadoTable = ({ materiais, onEditar, carregarMaterialPorId }) 
               <th>Qtd. Tinta (L)</th>
               <th>Qtd. Tinta Jantes (L)</th>
               <th>Qtd. Verniz (L)</th>
-              <th>Qtd. Gasóleo Estufa (L)</th>
               <th>Marca Verniz</th>
               <th>Massa de Polimento (kg)</th>
               <th>Preço Tinta Carro (€)</th>
@@ -113,7 +112,6 @@ const MaterialUtilizadoTable = ({ materiais, onEditar, carregarMaterialPorId }) 
                     <td>{formatWithUnit(m.quantidade_tinta, "L")}</td>
                     <td>{formatWithUnit(m.quantidade_tinta_jantes, "L")}</td>
                     <td>{formatWithUnit(m.quantidade_verniz, "L")}</td>
-                    <td>{formatWithUnit(m.quantidade_gasoleo_estufa, "L")}</td>
                     <td>{m.marca_verniz || "—"}</td>
                     <td>{formatWithUnit(m.massa_polimento, "kg")}</td>
                     <td>{formatWithUnit(m.preco_tinta_carro, "€")}</td>
