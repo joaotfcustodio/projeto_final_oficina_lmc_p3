@@ -32,12 +32,10 @@ const VeiculosPorClienteTable = ({ reloadSignal }) => {
     }
   };
 
-  // 🔁 Atualizar automaticamente se já há um NIF e o signal mudar
   useEffect(() => {
     if (nifBusca.trim()) {
       procurarVeiculos();
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [reloadSignal]);
 
   return (
@@ -50,32 +48,33 @@ const VeiculosPorClienteTable = ({ reloadSignal }) => {
           value={nifBusca}
           onChange={(e) => setNifBusca(e.target.value)}
         />
-        <Button onClick={procurarVeiculos} title="Procurar">
+        <Button
+          onClick={procurarVeiculos}
+          title="Procurar"
+          className="icon-button" 
+        >
           <SearchIcon />
         </Button>
       </div>
 
-      {erro && (
-        <div className="erro-msg">{erro}</div>
-      )}
+      {erro && <div className="erro-msg">{erro}</div>}
 
       {resultado ? (
         <>
           <p><strong>Cliente:</strong> {resultado.nome} ({resultado.nif})</p>
+
           {resultado.veiculos && resultado.veiculos.length > 0 ? (
             <div className="veiculos-nif-scroll-container">
-              <table className="veiculos-table">
-                <thead>
-                  <tr>
-                    <th>Matrícula</th>
-                    <th>Marca</th>
-                    <th>Modelo</th>
-                    <th>Ano</th>
-                  </tr>
-                </thead>
-              </table>
               <div className="veiculos-scroll-body">
                 <table className="veiculos-table">
+                  <thead>
+                    <tr>
+                      <th>Matrícula</th>
+                      <th>Marca</th>
+                      <th>Modelo</th>
+                      <th>Ano</th>
+                    </tr>
+                  </thead>
                   <tbody>
                     {resultado.veiculos.map((v, idx) => (
                       <tr key={idx}>

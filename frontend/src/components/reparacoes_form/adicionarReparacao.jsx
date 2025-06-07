@@ -44,7 +44,7 @@ const AdicionarReparacao = ({ onAtualizarTabela, reparacaoSelecionada, onCancelE
       setMatricula(reparacaoSelecionada.matricula);
       setPreco(reparacaoSelecionada.preco);
       const ativos = Object.entries(servicosMap)
-        .filter(([label, campo]) => reparacaoSelecionada[campo])
+        .filter(([_, campo]) => reparacaoSelecionada[campo])
         .map(([label]) => label);
       setServicosSelecionados(ativos);
     } else {
@@ -80,6 +80,7 @@ const AdicionarReparacao = ({ onAtualizarTabela, reparacaoSelecionada, onCancelE
     Object.values(servicosMap).forEach((campo) => {
       novaReparacao[campo] = false;
     });
+
     servicosSelecionados.forEach((servico) => {
       const campo = servicosMap[servico];
       if (campo) novaReparacao[campo] = true;
@@ -102,7 +103,7 @@ const AdicionarReparacao = ({ onAtualizarTabela, reparacaoSelecionada, onCancelE
         setMensagem("Reparação adicionada com sucesso!");
       }
 
-      onAtualizarTabela?.(); 
+      onAtualizarTabela?.();
       limparFormulario();
     } catch (err) {
       console.error("Erro ao submeter reparação:", err);
@@ -117,21 +118,28 @@ const AdicionarReparacao = ({ onAtualizarTabela, reparacaoSelecionada, onCancelE
   return (
     <form className="reparacao-form" onSubmit={handleSubmit}>
       <div className="reparacao-form-inputs">
-        <Input
-          type="text"
-          placeholder="Matrícula do veículo"
-          value={matricula}
-          onChange={(e) => setMatricula(e.target.value)}
-          required
-          disabled={!!reparacaoSelecionada}
-        />
-        <Input
-          type="number"
-          placeholder="Preço em euros"
-          value={preco}
-          onChange={(e) => setPreco(e.target.value)}
-          required
-        />
+        <label>
+          <b>Matrícula*</b>
+          <Input
+            type="text"
+            placeholder="Matrícula do veículo"
+            value={matricula}
+            onChange={(e) => setMatricula(e.target.value)}
+            required
+            disabled={!!reparacaoSelecionada}
+          />
+        </label>
+
+        <label>
+          Preço
+          <Input
+            type="number"
+            placeholder="Preço em euros"
+            value={preco}
+            onChange={(e) => setPreco(e.target.value)}
+            required
+          />
+        </label>
       </div>
 
       <div className="checkbox-grid">
@@ -161,14 +169,18 @@ const AdicionarReparacao = ({ onAtualizarTabela, reparacaoSelecionada, onCancelE
         </div>
       )}
 
-      <div style={{ display: "flex", gap: "0.5rem", marginTop: "1rem" }}>
-        <Button type="submit">
-          {reparacaoSelecionada ? "Atualizar Reparação" : "Adicionar Reparação"}
-        </Button>
-        {reparacaoSelecionada && (
-          <Button type="button" theme="secondary" onClick={limparFormulario}>
-            Cancelar
+      <div className="reparacao-actions">
+        <div className="reparacao-button">
+          <Button type="submit">
+            {reparacaoSelecionada ? "Atualizar Reparação" : "Adicionar Reparação"}
           </Button>
+        </div>
+        {reparacaoSelecionada && (
+          <div className="reparacao-button">
+            <Button type="button" theme="secondary" onClick={limparFormulario}>
+              Cancelar
+            </Button>
+          </div>
         )}
       </div>
     </form>

@@ -30,12 +30,11 @@ const VeiculoTable = ({ onEdit, reloadSignal }) => {
       const data = res.data.data || [];
       setTodosVeiculos(data);
       setVeiculosVisiveis(data);
-      setFiltro(""); // Limpa filtro quando clico em "Listar Todos"
+      setFiltro("");
     } catch (error) {
       console.error("Erro ao carregar veículos:", error);
     }
   };
-
 
   useEffect(() => {
     if (filtro.trim() === "") {
@@ -58,7 +57,7 @@ const VeiculoTable = ({ onEdit, reloadSignal }) => {
           Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
       });
-      await obterTodosVeiculos(); // atualiza após eliminar
+      await obterTodosVeiculos();
     } catch (error) {
       alert("Erro ao eliminar veículo.");
     }
@@ -67,14 +66,16 @@ const VeiculoTable = ({ onEdit, reloadSignal }) => {
   return (
     <div className="veiculos-card">
       <div className="veiculos-header">
-        <div style={{ display: "flex", gap: "0.5rem", alignItems: "center" }}>
+        <div className="veiculos-controls-row">
           <Input
             type="text"
             placeholder="Filtrar por matrícula"
             value={filtro}
             onChange={(e) => setFiltro(e.target.value)}
           />
-          <Button onClick={obterTodosVeiculos}>Listar Todos</Button>
+          <Button className="listar-btn" onClick={obterTodosVeiculos}>
+            Listar Todos
+          </Button>
         </div>
       </div>
 

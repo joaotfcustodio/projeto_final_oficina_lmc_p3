@@ -18,7 +18,9 @@ const ReparacoesPage = () => {
 
   return (
     <div className="reparacoes-page">
+  
       <h1 className="reparacoes-title">ÁREA DE REPARAÇÕES</h1>
+
       <div className="reparacoes-container">
         <Card title={reparacaoSelecionada ? "Editar Reparação" : "Adicionar Reparação"}>
           <AdicionarReparacao

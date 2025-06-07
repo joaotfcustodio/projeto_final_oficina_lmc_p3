@@ -1,18 +1,122 @@
+
 .reparacao-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 0.625rem;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    margin-bottom: 0.75rem;
+    width: 100%;
+    box-sizing: border-box;
 }
 
 .reparacao-header-button {
-    padding: 0.6875rem;
+    padding: 0.5em;
+}
+
+
+.reparacao-form {
+    width: 100%;
+    box-sizing: border-box;
 }
 
 .reparacao-form-inputs {
     display: flex;
-    gap: 0.625rem;
-    margin-bottom: 0.75rem;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-bottom: 0.5rem;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.reparacao-form-inputs label {
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    width: 100%;
+    font-size: 0.95rem;
+    font-weight: 500;
+    box-sizing: border-box;
+}
+
+
+.checkbox-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(13em, 1fr));
+    gap: 0.25rem 0.5rem;
+    margin: 0.5rem 0 1rem;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.checkbox-grid label {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-size: 0.9rem;
+    margin: 0;
+    padding: 0;
+}
+
+
+.reparacao-actions {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+    width: 100%;
+    box-sizing: border-box;
+    margin-top: 1rem;
+}
+
+.reparacao-button {
+    flex-grow: 0;
+}
+
+
+.reparacao-button button {
+    width: auto;
+}
+
+
+.reparacao-table-container {
+    width: 100%;
+    max-width: 100%;
+    overflow: auto;
+    border: 1px solid #ccc;
+    border-radius: 0.5rem;
+    box-sizing: border-box;
+}
+
+.reparacao-table {
+    width: 100%;
+    min-width: 100%;
+    table-layout: auto;
+    border-collapse: collapse;
+    font-size: 0.9rem;
+    box-sizing: border-box;
+}
+
+.reparacao-table thead th {
+    position: sticky;
+    top: 0;
+    background-color: #f0f0f0;
+    z-index: 1;
+    padding: 0.5em;
+    border-bottom: 1px solid #ccc;
+    text-align: center;
+    white-space: nowrap;
+}
+
+.reparacao-table td {
+    padding: 0.5em;
+    border-bottom: 1px solid #eee;
+    word-break: break-word;
+    text-align: center;
+    vertical-align: top;
 }
 
 .reparacao-table td:last-child,
@@ -21,62 +125,35 @@
     vertical-align: middle;
 }
 
-.reparacao-servicos label {
-    display: block;
-    margin-bottom: 0.3125rem;
-}
 
-.reparacao-servicos-section {
-    text-align: left;
-}
+@media (max-width: 48em) {
+    .reparacao-form-inputs {
+        flex-direction: column;
+    }
 
-.checkbox-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 0.5rem 1.5rem;
-    margin: 2rem 0 1.5rem 0;
-}
+    .checkbox-grid {
+        grid-template-columns: 1fr;
+    }
 
-.checkbox-grid label {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-}
+    .reparacao-actions {
+        flex-direction: column;
+        align-items: stretch;
+    }
 
-.reparacao-button {
-    flex-grow: initial;
-}
+    .reparacao-button {
+        width: 100%;
+    }
 
-.reparacao-actions {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 0.5rem;
-}
+    .reparacao-button button {
+        width: 100%;
+    }
 
-.reparacao-table-container {
-    max-height: 20rem;
-    overflow-y: auto;
-    border: 0.0625rem solid #ccc;
-    border-radius: 0.5rem;
-}
+    .reparacao-table {
+        font-size: 0.85rem;
+    }
 
-.reparacao-table {
-    width: 100%;
-    border-collapse: collapse;
-}
-
-.reparacao-table thead th {
-    position: sticky;
-    top: 0;
-    background-color: #f0f0f0;
-    z-index: 1;
-    padding: 0.75rem;
-    border-bottom: 0.0625rem solid #ccc;
-}
-
-.reparacao-table td {
-    padding: 0.5rem;
-    border-bottom: 0.0625rem solid #eee;
-    word-break: break-word;
+    .reparacao-table th,
+    .reparacao-table td {
+        padding: 0.4em;
+    }
 }

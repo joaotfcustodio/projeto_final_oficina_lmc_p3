@@ -107,36 +107,139 @@ const MaterialUtilizadoForm = ({ material, onSuccess }) => {
   return (
     <form className="material-form" onSubmit={handleSubmit}>
       <div className="form-grid">
-        <Input
-          name="id_reparacao"
-          placeholder="ID Reparação"
-          onChange={handleChange}
-          value={form.id_reparacao}
-          type="number"
-          required
-          disabled={modoEdicao}
-        />
-        <Input name="marca_tinta" placeholder="Marca da Tinta" onChange={handleChange} value={form.marca_tinta} />
-        <Input name="marca_verniz" placeholder="Marca do Verniz" onChange={handleChange} value={form.marca_verniz} />
-        <Input name="preco_tinta_carro" placeholder="Preço Tinta Carro (€)" onChange={handleChange} value={form.preco_tinta_carro} type="number" />
-        <Input name="preco_tinta_jantes" placeholder="Preço Tinta Jantes (€)" onChange={handleChange} value={form.preco_tinta_jantes} type="number" />
-        <Input name="preco_verniz_carro" placeholder="Preço Verniz Carro (€)" onChange={handleChange} value={form.preco_verniz_carro} type="number" />
-        <Input name="quantidade_tinta" placeholder="Qtd Tinta (L)" onChange={handleChange} value={form.quantidade_tinta} type="number" />
-        <Input name="quantidade_tinta_jantes" placeholder="Qtd Tinta Jantes (L)" onChange={handleChange} value={form.quantidade_tinta_jantes} type="number" />
-        <Input name="quantidade_verniz" placeholder="Qtd Verniz (L)" onChange={handleChange} value={form.quantidade_verniz} type="number" />
-        <Input name="massa_polimento" placeholder="Massa Polimento (kg)" onChange={handleChange} value={form.massa_polimento} />
-        <Input name="preco_gasoleo_estufa_lt" placeholder="Preço Gasóleo Estufa" onChange={handleChange} value={form.preco_gasoleo_estufa_lt} type="number" />
+        <label>
+          <b>ID Reparação*</b>
+          <Input
+            name="id_reparacao"
+            placeholder="ID Reparação"
+            onChange={handleChange}
+            value={form.id_reparacao}
+            type="number"
+            required
+            disabled={modoEdicao}
+          />
+        </label>
+
+        <label>
+          Marca da Tinta
+          <Input
+            name="marca_tinta"
+            placeholder="Marca da Tinta"
+            onChange={handleChange}
+            value={form.marca_tinta}
+          />
+        </label>
+
+        <label>
+          Marca do Verniz
+          <Input
+            name="marca_verniz"
+            placeholder="Marca do Verniz"
+            onChange={handleChange}
+            value={form.marca_verniz}
+          />
+        </label>
+
+        <label>
+          Preço Tinta Carro (€)
+          <Input
+            name="preco_tinta_carro"
+            placeholder="Preço Tinta Carro (€)"
+            onChange={handleChange}
+            value={form.preco_tinta_carro}
+            type="number"
+          />
+        </label>
+
+        <label>
+          Preço Tinta Jantes (€)
+          <Input
+            name="preco_tinta_jantes"
+            placeholder="Preço Tinta Jantes (€)"
+            onChange={handleChange}
+            value={form.preco_tinta_jantes}
+            type="number"
+          />
+        </label>
+
+        <label>
+          Preço Verniz Carro (€)
+          <Input
+            name="preco_verniz_carro"
+            placeholder="Preço Verniz Carro (€)"
+            onChange={handleChange}
+            value={form.preco_verniz_carro}
+            type="number"
+          />
+        </label>
+
+        <label>
+          Qtd Tinta (L)
+          <Input
+            name="quantidade_tinta"
+            placeholder="Qtd Tinta (L)"
+            onChange={handleChange}
+            value={form.quantidade_tinta}
+            type="number"
+          />
+        </label>
+
+        <label>
+          Qtd Tinta Jantes (L)
+          <Input
+            name="quantidade_tinta_jantes"
+            placeholder="Qtd Tinta Jantes (L)"
+            onChange={handleChange}
+            value={form.quantidade_tinta_jantes}
+            type="number"
+          />
+        </label>
+
+        <label>
+          Qtd Verniz (L)
+          <Input
+            name="quantidade_verniz"
+            placeholder="Qtd Verniz (L)"
+            onChange={handleChange}
+            value={form.quantidade_verniz}
+            type="number"
+          />
+        </label>
+
+        <label>
+          Massa Polimento (kg)
+          <Input
+            name="massa_polimento"
+            placeholder="Massa Polimento (kg)"
+            onChange={handleChange}
+            value={form.massa_polimento}
+          />
+        </label>
+
+        <label>
+          Preço Gasóleo Estufa
+          <Input
+            name="preco_gasoleo_estufa_lt"
+            placeholder="Preço Gasóleo Estufa"
+            onChange={handleChange}
+            value={form.preco_gasoleo_estufa_lt}
+            type="number"
+          />
+        </label>
       </div>
 
-      <div style={{ marginTop: "1rem", display: "flex", gap: "1rem" }}>
-        <div className="button-group">
-          <Button type="submit" className="small-button">
-            {modoEdicao ? "Atualizar" : "Adicionar"}
-          </Button>
-          <Button type="button" theme="secondary" onClick={handleClear} className="small-button">
-            Limpar
-          </Button>
-        </div>
+      <div className="button-group">
+        <Button type="submit" className="small-button">
+          {modoEdicao ? "Atualizar" : "Adicionar"}
+        </Button>
+        <Button
+          type="button"
+          theme="secondary"
+          className="small-button"
+          onClick={handleClear}
+        >
+          Limpar
+        </Button>
       </div>
     </form>
   );

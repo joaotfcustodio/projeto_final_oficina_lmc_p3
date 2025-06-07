@@ -3,11 +3,9 @@ import axios from "axios";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 
-// Components
 import Input from "@/components/ui/input";
 import Button from "@/components/ui/button";
 
-// Styles
 import "./styles.css";
 
 const ClienteTable = ({ onEditar, onUpdated }) => {
@@ -71,54 +69,57 @@ const ClienteTable = ({ onEditar, onUpdated }) => {
           value={filtro}
           onChange={(e) => setFiltro(e.target.value)}
         />
-        <Button onClick={handleProcurar}>Procurar</Button>
+        <Button className="procurar-btn" onClick={handleProcurar}>
+          Procurar
+        </Button>
       </div>
+
       <div className="clientes-table-wrapper">
-      <table className="clientes-table">
-        <thead>
-          <tr>
-            <th>NIF</th>
-            <th>Nome</th>
-            <th>Data Registo</th>
-            <th>Morada</th>
-            <th>Ações</th>
-          </tr>
-        </thead>
-        <tbody>
-          {clientesFiltrados.map((c) => (
-            <tr key={c.nif}>
-              <td>{c.nif}</td>
-              <td>{c.nome}</td>
-              <td>{new Date(c.data_registo).toLocaleDateString("pt-PT")}</td>
-              <td>{c.morada}</td>
-              <td>
-                <div className="reparacao-actions">
-                  <Button
-                    className="reparacao-button"
-                    title="Editar"
-                    variant="icon"
-                    onClick={() => handleEditar(c)}
-                  >
-                    <EditIcon style={{ width: 20, height: 20 }} />
-                  </Button>
-                  <Button
-                    className="reparacao-button"
-                    title="Eliminar"
-                    variant="icon"
-                    theme="secondary"
-                    onClick={() => handleEliminar(c.nif)}
-                  >
-                    <DeleteIcon
-                      style={{ width: 20, height: 20 }}
-                      color="error"
-                    />
-                  </Button>
-                </div>
-              </td>
+        <table className="clientes-table">
+          <thead>
+            <tr>
+              <th>NIF</th>
+              <th>Nome</th>
+              <th>Data Registo</th>
+              <th>Morada</th>
+              <th>Ações</th>
             </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            {clientesFiltrados.map((c) => (
+              <tr key={c.nif}>
+                <td>{c.nif}</td>
+                <td>{c.nome}</td>
+                <td>{new Date(c.data_registo).toLocaleDateString("pt-PT")}</td>
+                <td>{c.morada}</td>
+                <td>
+                  <div className="reparacao-actions">
+                    <Button
+                      className="reparacao-button"
+                      title="Editar"
+                      variant="icon"
+                      onClick={() => handleEditar(c)}
+                    >
+                      <EditIcon style={{ width: 20, height: 20 }} />
+                    </Button>
+                    <Button
+                      className="reparacao-button"
+                      title="Eliminar"
+                      variant="icon"
+                      theme="secondary"
+                      onClick={() => handleEliminar(c.nif)}
+                    >
+                      <DeleteIcon
+                        style={{ width: 20, height: 20 }}
+                        color="error"
+                      />
+                    </Button>
+                  </div>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
       </div>
     </>
   );

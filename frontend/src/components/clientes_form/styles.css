@@ -1,12 +1,78 @@
 .clientes-form {
     display: flex;
     flex-direction: column;
-    gap: 12px;
+    gap: 1.2rem;
+    max-width: 37.5rem;
+    margin: 0 auto;
+    padding: 2rem;
+    background-color: #fff;
+    border-radius: 1rem;
+    box-shadow: 0 0 0.625rem rgba(0, 0, 0, 0.1);
+    box-sizing: border-box;
     width: 100%;
+}
+
+.clientes-form label {
+    display: flex;
+    flex-direction: column;
+    font-size: 1rem;
 }
 
 .btn-group {
     display: flex;
-    justify-content: space-between;
-    gap: 10px;
+    flex-wrap: nowrap;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 1rem;
+    margin-top: 1rem;
+    width: 100%;
+}
+
+.btn-group button {
+    flex: 1 1 auto;
+    min-width: 7.5rem;
+    max-width: 12.5rem;
+    padding: 0.7em 1.4em;
+    font-size: 1rem;
+    border-radius: 0.5em;
+    box-sizing: border-box;
+}
+
+/* MOBILE */
+@media (max-width: 37.5rem) {
+    .clientes-form {
+        padding: 1rem;
+        border-radius: 0.5rem;
+    }
+
+    .btn-group {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .btn-group button {
+        width: 100%;
+        max-width: none;
+    }
+
+    .clientes-form label {
+        font-size: 0.95rem;
+    }
+}
+
+.mensagem {
+    padding: 1rem;
+    border-radius: 0.5rem;
+    font-weight: 500;
+    font-size: 0.95rem;
+}
+
+.mensagem.success {
+    background-color: #d4edda;
+    color: #155724;
+}
+
+.mensagem.error {
+    background-color: #f8d7da;
+    color: #721c24;
 }

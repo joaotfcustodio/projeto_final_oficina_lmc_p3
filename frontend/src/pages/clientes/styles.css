@@ -1,9 +1,42 @@
+.clientes-page {
+  padding-top: 2rem;
+}
+
 .clientes-container {
   display: grid;
   grid-template-columns: 0.5fr 1fr;
-  gap: 20px;
+  gap: 1.25rem;
 }
 
+
 .clientes-title {
-  margin-bottom: 40px;
+  margin-bottom: 2.5rem;
+  font-size: 1.5rem;
+  text-align: left;
+  padding-left: 1.5rem;
+  font-weight: bold;
+  color: #000;
+  display: block;
+}
+
+@media (max-width: 48rem) {
+  .clientes-page {
+    padding-top: 5rem;
+  }
+
+  .clientes-container {
+    grid-template-columns: 1fr;
+    margin-top: 2rem;
+  }
+
+  .clientes-title {
+    font-size: 1.25rem;
+    margin-bottom: 1.25rem;
+    padding-left: 1rem;
+    display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    position: relative;
+    z-index: 10;
+  }
 }

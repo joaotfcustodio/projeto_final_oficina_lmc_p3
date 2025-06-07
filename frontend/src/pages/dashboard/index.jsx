@@ -5,7 +5,7 @@ import Card from "@/components/card";
 import ClienteTable from "@/components/clientes_table";
 import ReparacaoForm from "@/components/reparacoes_form/ReparacoesForm";
 import VeiculoTable from "@/components/veiculos_table";
-import VeiculosPorClienteTable from "@/components/veiculos_por_cliente_table/index";
+import VeiculosPorClienteTable from "@/components/veiculos_por_cliente_table";
 import MaterialUtilizadoTable from "@/components/material_utilizado_form/material_utilizado_table";
 
 import "./styles.css";
@@ -55,6 +55,7 @@ const Dashboard = () => {
   return (
     <div className="dashboard-page">
       <h1 className="dashboard-title">DASHBOARD</h1>
+
       <div className="dashboard-container">
         <Card title="Clientes">
           <ClienteTable />
@@ -75,10 +76,10 @@ const Dashboard = () => {
             onSuccess={() => setReload((prev) => !prev)}
           />
         </Card>
-      </div>
 
-      <div className="reparacao-wrapper">
-        <ReparacaoForm />
+        <Card title="Lista de Reparações">
+          <ReparacaoForm />
+        </Card>
       </div>
     </div>
   );

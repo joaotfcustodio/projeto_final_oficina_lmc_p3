@@ -128,19 +128,36 @@ endpointsFunction.updateCliente = async (req, res) => {
 // Eliminar cliente por NIF
 endpointsFunction.deleteCliente = async (req, res) => {
   const { nif } = req.params;
+
   try {
-    const eliminado = await Clientes.destroy({ where: { nif } });
-    if (!eliminado) {
+    const cliente = await Clientes.findOne({
+      where: { nif },
+      include: [{ model: Veiculos, as: "veiculos" }],
+    });
+
+    if (!cliente) {
       return res.status(404).json({
         status: "error",
         message: "Cliente não encontrado.",
       });
     }
-    res.status(204).send();
+
+    // Desassociar veículos (limpa a tabela clientes_veiculos)
+    await cliente.setVeiculos([]);
+
+    // Eliminar o cliente
+    await cliente.destroy();
+
+    res.status(200).json({
+      status: "success",
+      message: "Cliente eliminado com sucesso.",
+    });
   } catch (error) {
+    console.error("Erro ao eliminar cliente:", error);
     res.status(500).json({
       status: "error",
       message: "Erro ao eliminar cliente.",
+      details: error.message,
     });
   }
 };

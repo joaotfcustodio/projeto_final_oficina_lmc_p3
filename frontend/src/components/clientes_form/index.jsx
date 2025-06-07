@@ -14,9 +14,8 @@ const ClienteForm = ({ clienteSelecionado, onCreated, resetClienteSelecionado })
   });
 
   const [mensagem, setMensagem] = useState(null);
-  const [tipoMensagem, setTipoMensagem] = useState(null); 
+  const [tipoMensagem, setTipoMensagem] = useState(null);
 
-  // Preencher form se estiver em modo edição
   useEffect(() => {
     if (clienteSelecionado) {
       setForm({
@@ -44,12 +43,10 @@ const ClienteForm = ({ clienteSelecionado, onCreated, resetClienteSelecionado })
       };
 
       if (clienteSelecionado) {
-        // Atualizar cliente
         await axios.put(`http://localhost:5000/api/v1/clientes/${form.nif}`, form, { headers });
         setMensagem("Cliente atualizado com sucesso!");
         setTipoMensagem("success");
       } else {
-        // Criar cliente
         await axios.post("http://localhost:5000/api/v1/clientes", form, { headers });
         setMensagem("Cliente criado com sucesso!");
         setTipoMensagem("success");
@@ -67,7 +64,6 @@ const ClienteForm = ({ clienteSelecionado, onCreated, resetClienteSelecionado })
         else if (status === 500) mensagemErro = "Erro interno no servidor.";
         else if (data?.message) mensagemErro = data.message;
       }
-
       setMensagem(mensagemErro);
       setTipoMensagem("error");
     }
@@ -82,22 +78,59 @@ const ClienteForm = ({ clienteSelecionado, onCreated, resetClienteSelecionado })
 
   return (
     <form className="clientes-form" onSubmit={handleSubmit}>
-      <Input name="nif" value={form.nif} onChange={handleChange} placeholder="NIF" disabled={!!clienteSelecionado} />
-      <Input name="nome" value={form.nome} onChange={handleChange} placeholder="Nome" />
-      <Input type="date" name="data_registo" value={form.data_registo} onChange={handleChange} />
-      <Input name="morada" value={form.morada} onChange={handleChange} placeholder="Morada" />
-      <Input name="contacto" value={form.contacto} onChange={handleChange} placeholder="Contacto" />
+      <label>
+        <b>NIF*</b>
+        <Input
+          name="nif"
+          value={form.nif}
+          onChange={handleChange}
+          placeholder="NIF"
+          disabled={!!clienteSelecionado}
+        />
+      </label>
+
+      <label>
+        Nome
+        <Input
+          name="nome"
+          value={form.nome}
+          onChange={handleChange}
+          placeholder="Nome"
+        />
+      </label>
+
+      <label>
+        Data de Registo
+        <Input
+          type="date"
+          name="data_registo"
+          value={form.data_registo}
+          onChange={handleChange}
+        />
+      </label>
+
+      <label>
+        Morada
+        <Input
+          name="morada"
+          value={form.morada}
+          onChange={handleChange}
+          placeholder="Morada"
+        />
+      </label>
+
+      <label>
+        Contacto
+        <Input
+          name="contacto"
+          value={form.contacto}
+          onChange={handleChange}
+          placeholder="Contacto"
+        />
+      </label>
 
       {mensagem && (
-        <div
-          style={{
-            backgroundColor: tipoMensagem === "success" ? "#d4edda" : "#f8d7da",
-            color: tipoMensagem === "success" ? "#155724" : "#721c24",
-            padding: "0.75rem",
-            borderRadius: "0.5rem",
-            marginTop: "1rem",
-          }}
-        >
+        <div className={`mensagem ${tipoMensagem}`}>
           {mensagem}
         </div>
       )}

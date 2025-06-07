@@ -1,22 +1,66 @@
+.veiculos-page {
+  padding: 1rem;
+  box-sizing: border-box;
+  max-width: 75rem;
+  margin: 0 auto;
+  width: 100%;
+}
+
+.veiculos-title {
+  font-size: 1.5rem;
+  margin-bottom: 2rem;
+  font-weight: bold;
+  color: #000;
+  text-align: left;
+  padding-left: 0.5rem;
+  display: block;
+}
+
+
 .veiculos-grid {
   display: flex;
   flex-direction: row;
   gap: 2rem;
   align-items: flex-start;
   flex-wrap: wrap;
-  margin-top: 2rem;
-
 }
+
 
 .form-column {
   flex: 1 1 22rem;
-  min-width: 20rem;
+  min-width: 100%;
 }
+
 
 .table-column {
   flex: 2 1 40rem;
-  min-width: 30rem;
+  min-width: 100%;
   display: flex;
   flex-direction: column;
   gap: 2rem;
+}
+
+
+@media (max-width: 48rem) {
+  .veiculos-page {
+    padding-top: 4.5rem;
+  }
+}
+
+@media (min-width: 48rem) {
+  .form-column {
+    min-width: 20rem;
+    flex: 1 1 22rem;
+  }
+
+  .table-column {
+    min-width: 30rem;
+    flex: 2 1 40rem;
+  }
+
+  .veiculos-title {
+    font-size: 2rem;
+    margin-bottom: 2.5rem;
+    padding-left: 0.75rem;
+  }
 }

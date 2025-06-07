@@ -1,11 +1,14 @@
-import React from "react";
+import React, { useState } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
-import LogoutIcon from "@mui/icons-material/Logout"; 
+import LogoutIcon from "@mui/icons-material/Logout";
+import MenuIcon from "@mui/icons-material/Menu";
+import CloseIcon from "@mui/icons-material/Close";
 
 import "./styles.css";
 
 const Sidebar = () => {
   const navigate = useNavigate();
+  const [isMobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   const handleLogout = () => {
     localStorage.removeItem("token");
@@ -13,25 +16,33 @@ const Sidebar = () => {
   };
 
   return (
-    <div className="sidebar">
-      <div className="sidebar-title">App da Oficina</div>
-
-      <nav className="sidebar-nav">
-        <NavLink to="/dashboard">Dashboard</NavLink>
-        <NavLink to="/clientes">Clientes</NavLink>
-        <NavLink to="/veiculos">Veículos</NavLink>
-        <NavLink to="/reparacoes">Reparações</NavLink>
-        <NavLink to="/materiais">Materiais Utilizados</NavLink>
-      </nav>
-
-      {/* Botão logout fixo no fundo */}
-      <div className="sidebar-logout">
-        <button className="logout-btn" onClick={handleLogout}>
-          <LogoutIcon sx={{ mr: 1 }} />
-          Logout
+    <>
+      <div className="mobile-header">
+        <button className="menu-toggle" onClick={() => setMobileMenuOpen(!isMobileMenuOpen)}>
+          {isMobileMenuOpen ? <CloseIcon /> : <MenuIcon />}
         </button>
+        <span className="mobile-title">App da Oficina</span>
       </div>
-    </div>
+
+      <div className={`sidebar ${isMobileMenuOpen ? "open" : ""}`}>
+        <div className="sidebar-title">App da Oficina</div>
+
+        <nav className="sidebar-nav">
+          <NavLink to="/dashboard" onClick={() => setMobileMenuOpen(false)}>Dashboard</NavLink>
+          <NavLink to="/clientes" onClick={() => setMobileMenuOpen(false)}>Clientes</NavLink>
+          <NavLink to="/veiculos" onClick={() => setMobileMenuOpen(false)}>Veículos</NavLink>
+          <NavLink to="/reparacoes" onClick={() => setMobileMenuOpen(false)}>Reparações</NavLink>
+          <NavLink to="/materiais" onClick={() => setMobileMenuOpen(false)}>Materiais Utilizados</NavLink>
+        </nav>
+
+        <div className="sidebar-logout">
+          <button className="logout-btn" onClick={handleLogout}>
+            <LogoutIcon sx={{ mr: 1 }} />
+            Logout
+          </button>
+        </div>
+      </div>
+    </>
   );
 };
 

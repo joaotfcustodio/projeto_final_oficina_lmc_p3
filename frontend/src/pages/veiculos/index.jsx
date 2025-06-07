@@ -36,11 +36,9 @@ const VeiculosPage = () => {
             />
           </Card>
 
-          <div className="cliente-veiculos-wrapper">
-            <Card title="Lista de Veículos associados a Clientes">
-              <VeiculosPorClienteTable reloadSignal={refresh} />
-            </Card>
-          </div>
+          <Card title="Lista de Veículos associados a Clientes">
+            <VeiculosPorClienteTable reloadSignal={refresh} />
+          </Card>
         </div>
       </div>
     </div>

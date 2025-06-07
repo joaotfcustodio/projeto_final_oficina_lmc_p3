@@ -1,9 +1,39 @@
+.reparacoes-page {
+  padding: 1rem;
+  box-sizing: border-box;
+  max-width: 75rem;
+  margin: 0 auto;
+  width: 100%;
+}
+
+
+.reparacoes-title {
+  font-size: 1.5rem;
+  margin-bottom: 2rem;
+  font-weight: bold;
+  color: #000;
+  text-align: left;
+  padding-left: 0.5rem;
+  display: block;
+}
+
 .reparacoes-container {
   display: grid;
   grid-template-columns: 1fr;
-  gap: 20px;
+  gap: 1.25rem;
 }
 
-.reparacoes-title {
-  margin-bottom: 40px;
+
+@media (max-width: 48rem) {
+  .reparacoes-page {
+    padding-top: 4.5rem;
+  }
+}
+
+@media (min-width: 48rem) {
+  .reparacoes-title {
+    font-size: 2rem;
+    margin-bottom: 2.5rem;
+    padding-left: 0.75rem;
+  }
 }
