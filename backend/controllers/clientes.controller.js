@@ -24,12 +24,12 @@ endpointsFunction.createCliente = async (req, res) => {
     });
   }
 
-  const nifRegex = /^[1235689]\d{8}$/;
+  const nifRegex = /^[123456789]\d{8}$/;
   if (!nifRegex.test(nif)) {
     return res.status(400).json({
       status: "error",
       message:
-        "NIF inválido. Deve conter 9 dígitos e começar por 1, 2, 3, 5, 6, 8 ou 9.",
+        "NIF inválido. Deve conter 9 dígitos e começar por 1, 2, 3, 4, 5, 6, 7, 8 ou 9.",
     });
   }
 
